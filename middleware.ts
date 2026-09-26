@@ -1,43 +1,79 @@
+import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import { env } from "@/lib/env";
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
+  let supabaseResponse = NextResponse.next({
+    request,
+  });
+
+  const supabase = createServerClient(
+    env.NEXT_PUBLIC_SUPABASE_URL || "https://placeholder-project.supabase.co",
+    env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "placeholder-anon-key",
+    {
+      cookies: {
+        getAll() {
+          return request.cookies.getAll();
+        },
+        setAll(cookiesToSet) {
+          cookiesToSet.forEach(({ name, value }) =>
+            request.cookies.set(name, value)
+          );
+          supabaseResponse = NextResponse.next({
+            request,
+          });
+          cookiesToSet.forEach(({ name, value, options }) =>
+            supabaseResponse.cookies.set(name, value, options)
+          );
+        },
+      },
+    }
+  );
+
+  // Refresh auth token session if expired
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
   const { pathname } = request.nextUrl;
 
   // Protect vendor dashboard routes
   if (pathname.startsWith("/dashboard")) {
-    const sessionCookie = request.cookies.get("sbu_vendor_session");
-
-    // In dev simulation/V1, allow access if session cookie exists or let login flow proceed
-    // When Supabase Auth cookie is active, checks authentication token
-    if (!sessionCookie && process.env.NODE_ENV === "production") {
+    if (!user) {
       const loginUrl = new URL("/login", request.url);
       loginUrl.searchParams.set("from", pathname);
-      return NextResponse.redirect(loginUrl);
+      const redirectResponse = NextResponse.redirect(loginUrl);
+      supabaseResponse.cookies.getAll().forEach((cookie) => {
+        redirectResponse.cookies.set(cookie.name, cookie.value, cookie);
+      });
+      return redirectResponse;
     }
   }
 
-  const response = NextResponse.next();
+  // If already logged in, redirect /login to /dashboard
+  if (pathname === "/login" && user) {
+    const dashboardUrl = new URL("/dashboard", request.url);
+    const redirectResponse = NextResponse.redirect(dashboardUrl);
+    supabaseResponse.cookies.getAll().forEach((cookie) => {
+      redirectResponse.cookies.set(cookie.name, cookie.value, cookie);
+    });
+    return redirectResponse;
+  }
 
   // Add defense-in-depth security headers
-  response.headers.set("X-Content-Type-Options", "nosniff");
-  response.headers.set("X-Frame-Options", "DENY");
-  response.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
-  response.headers.set(
+  supabaseResponse.headers.set("X-Content-Type-Options", "nosniff");
+  supabaseResponse.headers.set("X-Frame-Options", "DENY");
+  supabaseResponse.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
+  supabaseResponse.headers.set(
     "Permissions-Policy",
     "camera=(), microphone=(), geolocation=(), interest-cohort=()"
   );
 
-  return response;
+  return supabaseResponse;
 }
 
 export const config = {
   matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     */
-    "/((?!_next/static|_next/image|favicon.ico).*)",
+    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
   ],
 };

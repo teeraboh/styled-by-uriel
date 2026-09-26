@@ -32,7 +32,7 @@ export default function CartPage() {
               href="/shop"
               className="inline-flex items-center justify-center bg-primary-container text-on-primary-container hover:bg-primary hover:text-on-primary px-6 py-3 rounded-lg text-sm font-bold uppercase tracking-wider transition-colors"
             >
-              Explore Collections
+              Explore Shop
             </Link>
           </div>
         </div>
@@ -70,8 +70,8 @@ export default function CartPage() {
               <h4 className="text-lg font-bold text-on-surface">
                 Nationwide Delivery Available
               </h4>
-              <p className="text-xs text-on-surface-variant">
-                Delivered across Nigeria — delivery cost is calculated at
+              <p className="text-xs sm:text-sm text-on-surface-variant leading-relaxed">
+                Delivered across all Nigerian states. Delivery cost is calculated at
                 checkout.
               </p>
             </div>
@@ -83,16 +83,32 @@ export default function CartPage() {
           {/* Left column */}
           <section aria-label="Shopping Cart Items" className="lg:col-span-8 flex flex-col gap-6">
             <div className="flex flex-col gap-4">
-              {items.map((item) => (
-                <CartLineItem
-                  key={`${item.productId}-${item.variationId}`}
-                  item={item}
-                  onUpdateQuantity={(qty) =>
-                    updateQuantity(item.productId, item.variationId, qty)
-                  }
-                  onRemove={() => removeItem(item.productId, item.variationId)}
-                />
-              ))}
+              {items.map((item) => {
+                const itemKey = `${item.productId}-${item.variationId || ""}-${item.selectedSize || ""}-${item.selectedColour || ""}`;
+                return (
+                  <CartLineItem
+                    key={itemKey}
+                    item={item}
+                    onUpdateQuantity={(qty) =>
+                      updateQuantity(
+                        item.productId,
+                        item.variationId,
+                        qty,
+                        item.selectedSize,
+                        item.selectedColour
+                      )
+                    }
+                    onRemove={() =>
+                      removeItem(
+                        item.productId,
+                        item.variationId,
+                        item.selectedSize,
+                        item.selectedColour
+                      )
+                    }
+                  />
+                );
+              })}
             </div>
 
             {/* Continue shopping + empty cart */}

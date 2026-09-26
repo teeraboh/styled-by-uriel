@@ -78,3 +78,18 @@ export function checkRateLimit(
     reset: Math.ceil(current.resetAt / 1000),
   };
 }
+
+/**
+ * Safely extracts client IP from Next.js request headers without logging or exposing it.
+ */
+export function getClientIp(req: { headers: { get(name: string): string | null } }): string {
+  const forwarded = req.headers.get("x-forwarded-for");
+  if (forwarded) {
+    const firstIp = forwarded.split(",")[0]?.trim();
+    if (firstIp) return firstIp;
+  }
+  const realIp = req.headers.get("x-real-ip");
+  if (realIp) return realIp.trim();
+  return (req as any).ip || "127.0.0.1";
+}
+

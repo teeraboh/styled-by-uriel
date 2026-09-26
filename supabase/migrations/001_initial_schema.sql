@@ -15,7 +15,8 @@ CREATE TABLE IF NOT EXISTS public.categories (
 CREATE TABLE IF NOT EXISTS public.products (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     name TEXT NOT NULL,
-    description TEXT NOT NULL,
+    slug TEXT NOT NULL UNIQUE,
+    description TEXT NOT NULL DEFAULT '',
     price NUMERIC(10, 2) NOT NULL CHECK (price > 0),
     category_id UUID NOT NULL REFERENCES public.categories(id) ON DELETE RESTRICT,
     availability BOOLEAN NOT NULL DEFAULT true,
@@ -70,6 +71,19 @@ CREATE TABLE IF NOT EXISTS public.order_items (
     unit_price NUMERIC(10, 2) NOT NULL CHECK (unit_price > 0),
     subtotal NUMERIC(10, 2) NOT NULL CHECK (subtotal >= 0)
 );
+
+-- ============================================
+-- INDEXES
+-- ============================================
+CREATE INDEX IF NOT EXISTS idx_categories_slug ON public.categories(slug);
+CREATE INDEX IF NOT EXISTS idx_products_slug ON public.products(slug);
+CREATE INDEX IF NOT EXISTS idx_products_category_id ON public.products(category_id);
+CREATE INDEX IF NOT EXISTS idx_products_availability ON public.products(availability);
+CREATE INDEX IF NOT EXISTS idx_product_images_product_id ON public.product_images(product_id);
+CREATE INDEX IF NOT EXISTS idx_product_variations_product_id ON public.product_variations(product_id);
+CREATE INDEX IF NOT EXISTS idx_orders_payment_status ON public.orders(payment_status);
+CREATE INDEX IF NOT EXISTS idx_orders_flutterwave_ref ON public.orders(flutterwave_reference);
+CREATE INDEX IF NOT EXISTS idx_order_items_order_id ON public.order_items(order_id);
 
 -- ============================================
 -- ROW LEVEL SECURITY (RLS) POLICIES

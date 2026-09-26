@@ -7,6 +7,9 @@ import type { CartItem, CartState } from "@/types";
  * No server session for buyers (PRD §5, §11).
  * SSR-guarded: only hydrates on the client.
  */
+const UUID_REGEX =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
 export const useCartStore = create<CartState>()(
   persist(
     (set, get) => ({
@@ -14,12 +17,20 @@ export const useCartStore = create<CartState>()(
       lastAdded: null,
 
       addItem: (newItem: CartItem) => {
+        // Guard against non-UUID product IDs from legacy mock data
+        if (!newItem.productId || !UUID_REGEX.test(newItem.productId)) {
+          console.warn("[useCartStore] Refusing to add item with invalid UUID:", newItem.productId);
+          return;
+        }
+
         set((state) => {
-          // Check if this exact product + variation combo already exists
+          // Check if this exact product + variation + size + colour combo already exists
           const existingIndex = state.items.findIndex(
             (item) =>
               item.productId === newItem.productId &&
-              item.variationId === newItem.variationId
+              (item.variationId || null) === (newItem.variationId || null) &&
+              (item.selectedSize || null) === (newItem.selectedSize || null) &&
+              (item.selectedColour || null) === (newItem.selectedColour || null)
           );
 
           let items: CartItem[];
@@ -41,27 +52,56 @@ export const useCartStore = create<CartState>()(
         });
       },
 
-      removeItem: (productId: string, variationId: string | null) => {
+      buyNow: (item: CartItem) => {
+        if (!item.productId || !UUID_REGEX.test(item.productId)) {
+          console.warn("[useCartStore] Refusing buyNow with invalid UUID:", item.productId);
+          return;
+        }
+        set({ items: [item], lastAdded: item });
+      },
+
+      removeItem: (
+        productId: string,
+        variationId: string | null,
+        selectedSize?: string | null,
+        selectedColour?: string | null
+      ) => {
         set((state) => ({
-          items: state.items.filter(
-            (item) =>
-              !(item.productId === productId && item.variationId === variationId)
-          ),
+          items: state.items.filter((item) => {
+            const matchesProduct = item.productId === productId;
+            const matchesVariation = (item.variationId || null) === (variationId || null);
+            const matchesSize =
+              selectedSize === undefined || (item.selectedSize || null) === (selectedSize || null);
+            const matchesColour =
+              selectedColour === undefined || (item.selectedColour || null) === (selectedColour || null);
+
+            return !(matchesProduct && matchesVariation && matchesSize && matchesColour);
+          }),
         }));
       },
 
       updateQuantity: (
         productId: string,
         variationId: string | null,
-        quantity: number
+        quantity: number,
+        selectedSize?: string | null,
+        selectedColour?: string | null
       ) => {
         if (quantity < 1) return; // No invalid quantities (PRD §11)
         set((state) => ({
-          items: state.items.map((item) =>
-            item.productId === productId && item.variationId === variationId
-              ? { ...item, quantity }
-              : item
-          ),
+          items: state.items.map((item) => {
+            const matchesProduct = item.productId === productId;
+            const matchesVariation = (item.variationId || null) === (variationId || null);
+            const matchesSize =
+              selectedSize === undefined || (item.selectedSize || null) === (selectedSize || null);
+            const matchesColour =
+              selectedColour === undefined || (item.selectedColour || null) === (selectedColour || null);
+
+            if (matchesProduct && matchesVariation && matchesSize && matchesColour) {
+              return { ...item, quantity };
+            }
+            return item;
+          }),
         }));
       },
 
@@ -83,6 +123,17 @@ export const useCartStore = create<CartState>()(
     {
       name: "styled-by-uriel-cart",
       partialize: (state) => ({ items: state.items }),
+      onRehydrateStorage: () => (state) => {
+        if (state && Array.isArray(state.items)) {
+          // Auto-purge any stale items with non-UUID product IDs from older mock versions
+          state.items = state.items.filter(
+            (item) =>
+              item &&
+              typeof item.productId === "string" &&
+              UUID_REGEX.test(item.productId)
+          );
+        }
+      },
     }
   )
 );

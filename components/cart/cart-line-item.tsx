@@ -26,15 +26,15 @@ export function CartLineItem({
     >
       {/* Thumbnail */}
       <Link
-        href={`/product/${item.productId}`}
-        className="w-20 h-20 sm:w-24 sm:h-24 rounded-lg overflow-hidden bg-surface-container flex-shrink-0 shadow-sm row-span-2 sm:row-span-1"
+        href={`/product/${item.slug || item.productId}`}
+        className="w-20 h-20 sm:w-24 sm:h-24 rounded-lg overflow-hidden bg-surface-container flex-shrink-0 shadow-sm row-span-2 sm:row-span-1 block group"
       >
         <Image
           src={item.imageUrl}
           alt={item.name}
           width={112}
           height={112}
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform"
         />
       </Link>
 
@@ -44,7 +44,12 @@ export function CartLineItem({
           Aba Crafted
         </span>
         <h3 className="text-base sm:text-lg font-bold text-on-surface truncate">
-          {item.name}
+          <Link
+            href={`/product/${item.slug || item.productId}`}
+            className="hover:text-primary transition-colors"
+          >
+            {item.name}
+          </Link>
         </h3>
         {(item.selectedSize || item.selectedColour) && (
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-on-surface-variant">
@@ -72,14 +77,14 @@ export function CartLineItem({
       </div>
 
       {/* Stepper + price + remove */}
-      <div className="flex items-center justify-between sm:justify-end gap-4 sm:gap-5 w-full sm:w-auto col-span-2 sm:col-span-1 mt-1 sm:mt-0">
+      <div className="flex items-center justify-between sm:justify-end gap-3 sm:gap-5 w-full sm:w-auto col-span-2 sm:col-span-1 mt-1 sm:mt-0">
         <div className="flex items-center bg-surface-container-low rounded-lg p-1 flex-shrink-0">
           <button
             aria-label="Decrease quantity"
             type="button"
             onClick={() => onUpdateQuantity(Math.max(1, item.quantity - 1))}
             disabled={item.quantity <= 1}
-            className="w-8 h-8 rounded flex items-center justify-center text-on-surface hover:bg-surface-container-high disabled:opacity-40 transition-colors"
+            className="w-10 h-10 rounded-md flex items-center justify-center text-on-surface hover:bg-surface-container-high disabled:opacity-40 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
           >
             <Minus className="w-4 h-4" strokeWidth={2} />
           </button>
@@ -90,7 +95,7 @@ export function CartLineItem({
             aria-label="Increase quantity"
             type="button"
             onClick={() => onUpdateQuantity(item.quantity + 1)}
-            className="w-8 h-8 rounded flex items-center justify-center text-on-surface hover:bg-surface-container-high transition-colors"
+            className="w-10 h-10 rounded-md flex items-center justify-center text-on-surface hover:bg-surface-container-high transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
           >
             <Plus className="w-4 h-4" strokeWidth={2} />
           </button>
@@ -109,7 +114,7 @@ export function CartLineItem({
           aria-label={`Remove ${item.name} from cart`}
           type="button"
           onClick={onRemove}
-          className="px-2 py-1 text-on-surface-variant hover:text-error rounded text-[13px] font-semibold uppercase tracking-wider flex items-center gap-1 transition-colors hover:bg-surface-container-high flex-shrink-0"
+          className="min-w-[44px] min-h-[44px] p-2 text-on-surface-variant hover:text-error rounded-lg text-[13px] font-semibold uppercase tracking-wider flex items-center justify-center gap-1.5 transition-colors hover:bg-surface-container-high flex-shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-error"
         >
           <Trash2 className="w-4 h-4" strokeWidth={1.75} />
           <span className="hidden md:inline">Remove</span>

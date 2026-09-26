@@ -92,16 +92,16 @@ export default function CollectionsPage() {
       <section className="w-full px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto py-10 sm:py-14">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div className="max-w-2xl">
-            <div className="flex items-center gap-2 mb-2 text-primary">
-              <Sparkles className="w-4 h-4" strokeWidth={1.75} />
+            <div className="flex items-center gap-2 mb-2">
+              <span className="w-8 h-px bg-primary" />
               <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-primary">
                 Editions &amp; Wardrobes
               </span>
             </div>
-            <h1 className="font-display text-4xl sm:text-5xl text-on-surface tracking-tight font-semibold">
+            <h1 className="font-display text-3xl sm:text-4xl lg:text-[42px] text-on-surface tracking-tight font-semibold leading-tight">
               Curated Collections
             </h1>
-            <p className="text-base text-on-surface-variant mt-2 max-w-xl">
+            <p className="text-sm sm:text-base text-on-surface-variant mt-2 max-w-xl leading-relaxed">
               Thoughtfully designed wardrobes for every occasion, from
               playground adventures to celebration streetwear. Tailored for
               comfort, made to inspire confidence.
@@ -142,7 +142,7 @@ export default function CollectionsPage() {
               <h2 className="font-display text-3xl sm:text-4xl text-on-surface mb-2 leading-tight font-semibold">
                 The Signature Streetwear Drop 2026
               </h2>
-              <p className="text-base text-on-surface-variant mb-6 max-w-lg">
+              <p className="text-sm sm:text-base text-on-surface-variant mb-6 max-w-lg leading-relaxed">
                 High-grade cotton, statement patches, and relaxed silhouettes
                 made for effortless confidence. Created to let little ones move
                 with pride and style.
@@ -197,7 +197,7 @@ export default function CollectionsPage() {
       {/* ── Collection grid ── */}
       <section className="w-full px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto py-6">
         <div className="flex flex-col items-center text-center mb-10">
-          <span className="text-[11px] font-bold uppercase text-primary tracking-[0.25em] mb-2">
+          <span className="text-[11px] font-bold uppercase text-primary tracking-[0.2em] mb-2">
             Seasonal Capsules
           </span>
           <h2 className="font-display text-3xl sm:text-4xl text-on-surface font-semibold">
@@ -237,7 +237,7 @@ export default function CollectionsPage() {
                       From ₦{collection.fromPrice.toLocaleString("en-NG")}
                     </span>
                   </div>
-                  <p className="text-sm text-on-surface-variant">
+                  <p className="text-sm text-on-surface-variant leading-relaxed">
                     {collection.description}
                   </p>
                 </div>

@@ -67,7 +67,7 @@ export function Footer() {
       data-purpose="site-footer"
       id="contact"
     >
-      <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-12 pb-12 items-start">
           {/* Logo card */}
           <div className="flex items-start">
@@ -92,7 +92,7 @@ export function Footer() {
                 <li key={link.label}>
                   <Link
                     href={link.href}
-                    className="hover:text-brand-warm-brown transition-colors"
+                    className="hover:text-brand-warm-brown transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-warm-brown rounded-sm"
                   >
                     {link.label}
                   </Link>
@@ -106,13 +106,13 @@ export function Footer() {
             <h4 className="text-sm font-bold uppercase tracking-wider text-brand-dark-brown mb-4">
               FOLLOW US
             </h4>
-            <div className="flex items-center gap-2 mb-4 text-brand-dark-brown">
+            <div className="flex items-center gap-3 mb-4 text-brand-dark-brown">
               <a
                 href="https://instagram.com/official_styledbyuriel"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Instagram"
-                className="w-8 h-8 rounded-full border border-brand-beige flex items-center justify-center hover:bg-brand-warm-brown hover:border-brand-warm-brown hover:text-white transition duration-200"
+                className="w-10 h-10 rounded-full border border-brand-beige flex items-center justify-center hover:bg-brand-warm-brown hover:border-brand-warm-brown hover:text-white transition duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-warm-brown"
               >
                 <InstagramIcon />
               </a>
@@ -121,7 +121,7 @@ export function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="TikTok"
-                className="w-8 h-8 rounded-full border border-brand-beige flex items-center justify-center hover:bg-brand-warm-brown hover:border-brand-warm-brown hover:text-white transition duration-200"
+                className="w-10 h-10 rounded-full border border-brand-beige flex items-center justify-center hover:bg-brand-warm-brown hover:border-brand-warm-brown hover:text-white transition duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-warm-brown"
               >
                 <TikTokIcon />
               </a>
@@ -158,14 +158,14 @@ export function Footer() {
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Enter your email address"
                   aria-label="Email address"
-                  className="w-full bg-white border-brand-beige rounded-lg py-2.5 pl-3 pr-12 text-xs focus-visible:ring-brand-warm-brown"
+                  className="w-full min-h-[44px] bg-white border-brand-beige rounded-lg py-2.5 pl-3.5 pr-12 text-xs focus-visible:ring-brand-warm-brown"
                 />
                 <Button
                   aria-label="Subscribe"
                   size="icon"
                   type="submit"
                   disabled={isSubmitting}
-                  className="absolute right-1 top-1 bottom-1 h-auto px-3 bg-brand-warm-brown hover:bg-brand-warm-brown-dark text-white rounded-md"
+                  className="absolute right-1 top-1 bottom-1 w-10 h-auto bg-brand-warm-brown hover:bg-brand-warm-brown-dark text-white rounded-md flex items-center justify-center"
                 >
                   {isSubmitting ? "…" : "→"}
                 </Button>
@@ -186,7 +186,7 @@ export function Footer() {
             © {new Date().getFullYear()} Styled by Uriel. All Rights Reserved.
           </p>
           <a
-            className="flex items-center gap-2 bg-[#25D366] hover:bg-[#20ba59] text-white text-xs font-bold px-4 py-2.5 rounded-full shadow-lg transition-all hover:scale-105"
+            className="min-h-[44px] inline-flex items-center gap-2 bg-[#25D366] hover:bg-[#20ba59] text-white text-xs font-bold px-4 py-2.5 rounded-full shadow-lg transition-all hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#25D366]"
             href={WHATSAPP_URL}
             rel="noopener"
             target="_blank"

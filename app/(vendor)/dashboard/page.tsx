@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import {
   Calendar,
@@ -19,7 +19,11 @@ import {
   X,
   PackageCheck,
   Check,
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
+import { useVendorCatalogStore } from "@/store/vendor-catalog";
 
 interface OrderItem {
   id: string;
@@ -75,17 +79,93 @@ const INITIAL_ORDERS: OrderItem[] = [
   },
 ];
 
+const MONTH_NAMES = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
+
+const MONTH_SHORT = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
+];
+
+function toIsoDate(date: Date): string {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, "0");
+  const d = String(date.getDate()).padStart(2, "0");
+  return `${y}-${m}-${d}`;
+}
+
+function formatRangeLabel(start: string, end: string): string {
+  const s = new Date(`${start}T00:00:00`);
+  const e = new Date(`${end}T00:00:00`);
+  if (Number.isNaN(s.getTime()) || Number.isNaN(e.getTime())) return "Custom range";
+  if (s.getMonth() === e.getMonth() && s.getFullYear() === e.getFullYear()) {
+    return `${s.getDate()} – ${e.getDate()} ${MONTH_SHORT[s.getMonth()]} ${e.getFullYear()}`;
+  }
+  if (s.getFullYear() === e.getFullYear()) {
+    return `${s.getDate()} ${MONTH_SHORT[s.getMonth()]} – ${e.getDate()} ${MONTH_SHORT[e.getMonth()]} ${e.getFullYear()}`;
+  }
+  return `${s.getDate()} ${MONTH_SHORT[s.getMonth()]} ${s.getFullYear()} – ${e.getDate()} ${MONTH_SHORT[e.getMonth()]} ${e.getFullYear()}`;
+}
+
 export default function VendorDashboardPage() {
   const [orders, setOrders] = useState<OrderItem[]>(INITIAL_ORDERS);
   const [selectedOrder, setSelectedOrder] = useState<OrderItem | null>(null);
-  const [modalType, setModalType] = useState<"dispatch" | "track" | "receipt" | "waybill" | "ledger" | null>(null);
+  const [modalType, setModalType] = useState<"dispatch" | "track" | "receipt" | "waybill" | null>(null);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [isPickerOpen, setIsPickerOpen] = useState(false);
+  const [pickerMode, setPickerMode] = useState<"month" | "range">("month");
+  const [selectedYear, setSelectedYear] = useState(2026);
+  const [selectedMonth, setSelectedMonth] = useState(2);
+  const [rangeStart, setRangeStart] = useState("");
+  const [rangeEnd, setRangeEnd] = useState("");
+  const [periodLabel, setPeriodLabel] = useState("March 2026");
+  const pickerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!isPickerOpen) return;
+    const handleClickOutside = (event: MouseEvent) => {
+      if (pickerRef.current && !pickerRef.current.contains(event.target as Node)) {
+        setIsPickerOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [isPickerOpen]);
+
+  const products = useVendorCatalogStore((state) => state.products);
+  const productsCount = products.length;
+  const tracksuitsCount = products.filter((p) => p.category === "tracksuits").length;
+  const teesCount = products.filter((p) => p.category === "tees").length;
+  const denimCount = products.filter((p) => p.category === "denim").length;
+  const shortsCount = products.filter((p) => p.category === "shorts").length;
 
   const showToast = (msg: string) => {
     setToastMessage(msg);
     setTimeout(() => {
-      setToastMessage(null);
-    }, 3500);
+      setToastMessage(null), 3500;
+    });
   };
 
   const handleDispatchOrder = (orderId: string) => {
@@ -99,7 +179,65 @@ export default function VendorDashboardPage() {
   };
 
   const handleDownloadLedger = () => {
-    setModalType("ledger");
+    const periodHeader = periodLabel;
+    const csvRows = [
+      ["Styled by Uriel Atelier Ledger"],
+      ["Period", periodHeader],
+      ["Export Date", new Date().toISOString().slice(0, 10)],
+      [""],
+      ["Order ID", "Customer", "Location", "Item", "Amount (NGN)", "Status"],
+      ...orders.map((o) => [
+        o.id,
+        o.customerName,
+        o.customerLocation,
+        o.item,
+        String(o.amount),
+        o.status,
+      ]),
+      [""],
+      ["Gross Sales (NGN)", "3,840,000"],
+      ["Completed Orders", "142"],
+    ];
+    const csv = csvRows
+      .map((row) =>
+        row.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(",")
+      )
+      .join("\n");
+    const blob = new Blob(["\uFEFF" + csv], {
+      type: "text/csv;charset=utf-8;",
+    });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `styled-by-uriel-ledger-${periodLabel.replace(/[^a-zA-Z0-9]+/g, "-").toLowerCase()}.csv`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    setModalType(null);
+    showToast(`Ledger for ${periodHeader} downloaded successfully.`);
+  };
+
+  const handleSelectMonth = (monthIndex: number) => {
+    setPickerMode("month");
+    setSelectedMonth(monthIndex);
+    setSelectedYear(selectedYear);
+    setPeriodLabel(`${MONTH_NAMES[monthIndex]} ${selectedYear}`);
+    setIsPickerOpen(false);
+  };
+
+  const handleApplyRange = () => {
+    if (!rangeStart || !rangeEnd) {
+      showToast("Select both a start and an end date.");
+      return;
+    }
+    if (rangeEnd < rangeStart) {
+      showToast("End date cannot be before the start date.");
+      return;
+    }
+    setPeriodLabel(formatRangeLabel(rangeStart, rangeEnd));
+    setPickerMode("range");
+    setIsPickerOpen(false);
   };
 
   return (
@@ -134,13 +272,122 @@ export default function VendorDashboardPage() {
         </div>
 
         <div className="flex items-center gap-2.5 shrink-0 flex-wrap">
-          <button
-            type="button"
-            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg bg-white text-[#221a16] text-[13px] font-medium shadow-xs hover:bg-[#fceae3] border border-[#f0dfd8] transition-colors"
-          >
-            <Calendar className="w-4 h-4 text-[#71523c]" />
-            <span>March 2026</span>
-          </button>
+          <div className="relative" ref={pickerRef}>
+            <button
+              type="button"
+              onClick={() => setIsPickerOpen((open) => !open)}
+              className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg bg-white text-[#221a16] text-[13px] font-medium shadow-xs hover:bg-[#fceae3] border border-[#f0dfd8] transition-colors"
+            >
+              <Calendar className="w-4 h-4 text-[#71523c]" />
+              <span>{periodLabel}</span>
+              <ChevronDown className="w-3.5 h-3.5 text-[#71523c]" />
+            </button>
+
+            {isPickerOpen && (
+              <div className="absolute left-0 top-full mt-2 z-50 w-[calc(100vw-2rem)] max-w-[90vw] sm:w-auto sm:min-w-[17rem] max-h-[60vh] overflow-y-auto rounded-xl bg-white shadow-xl border border-[#f0dfd8] p-3 animate-in fade-in zoom-in-95 duration-150">
+                <div className="flex gap-1.5 mb-3">
+                  <button
+                    type="button"
+                    onClick={() => setPickerMode("month")}
+                    className={`flex-1 py-1.5 rounded-md text-[11px] font-bold uppercase tracking-wider transition-colors ${
+                      pickerMode === "month"
+                        ? "bg-[#8c6a53] text-white"
+                        : "bg-[#fff1eb] text-[#71523c]"
+                    }`}
+                  >
+                    Month
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setPickerMode("range")}
+                    className={`flex-1 py-1.5 rounded-md text-[11px] font-bold uppercase tracking-wider transition-colors ${
+                      pickerMode === "range"
+                        ? "bg-[#8c6a53] text-white"
+                        : "bg-[#fff1eb] text-[#71523c]"
+                    }`}
+                  >
+                    Custom Range
+                  </button>
+                </div>
+
+                {pickerMode === "month" ? (
+                  <>
+                    <div className="flex items-center justify-between mb-3">
+                      <button
+                        type="button"
+                        onClick={() => setSelectedYear((year) => year - 1)}
+                        className="p-1 rounded-md text-[#71523c] hover:bg-[#fceae3]"
+                        aria-label="Previous year"
+                      >
+                        <ChevronLeft className="w-4 h-4" />
+                      </button>
+                      <span className="text-[13px] font-bold text-[#221a16]">
+                        {selectedYear}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => setSelectedYear((year) => year + 1)}
+                        className="p-1 rounded-md text-[#71523c] hover:bg-[#fceae3]"
+                        aria-label="Next year"
+                      >
+                        <ChevronRight className="w-4 h-4" />
+                      </button>
+                    </div>
+                    <div className="grid grid-cols-3 gap-1.5">
+                      {MONTH_NAMES.map((month, index) => (
+                        <button
+                          key={month}
+                          type="button"
+                          onClick={() => handleSelectMonth(index)}
+                          className={`py-2 rounded-md text-[11px] font-semibold transition-colors ${
+                            pickerMode === "month" &&
+                            index === selectedMonth &&
+                            periodLabel === `${month} ${selectedYear}`
+                              ? "bg-[#8c6a53] text-white"
+                              : "bg-[#fff1eb] text-[#221a16] hover:bg-[#fedab1]"
+                          }`}
+                        >
+                          {month.slice(0, 3)}
+                        </button>
+                      ))}
+                    </div>
+                  </>
+                ) : (
+                  <div className="space-y-2.5">
+                    <label className="block">
+                      <span className="text-[11px] font-bold uppercase tracking-wider text-[#50453e]">
+                        Start
+                      </span>
+                      <input
+                        type="date"
+                        value={rangeStart}
+                        onChange={(e) => setRangeStart(e.target.value)}
+                        className="mt-1 w-full px-2.5 py-1.5 rounded-lg border border-[#f0dfd8] bg-white text-[12px] text-[#221a16] focus:outline-none focus:border-[#8c6a53]"
+                      />
+                    </label>
+                    <label className="block">
+                      <span className="text-[11px] font-bold uppercase tracking-wider text-[#50453e]">
+                        End
+                      </span>
+                      <input
+                        type="date"
+                        value={rangeEnd}
+                        onChange={(e) => setRangeEnd(e.target.value)}
+                        className="mt-1 w-full px-2.5 py-1.5 rounded-lg border border-[#f0dfd8] bg-white text-[12px] text-[#221a16] focus:outline-none focus:border-[#8c6a53]"
+                      />
+                    </label>
+                    <button
+                      type="button"
+                      onClick={handleApplyRange}
+                      className="w-full py-2 rounded-lg bg-[#8c6a53] text-white text-[11px] font-bold uppercase tracking-wider hover:bg-[#71523c] transition-colors"
+                    >
+                      Apply Range
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
           <button
             type="button"
             onClick={handleDownloadLedger}
@@ -193,7 +440,7 @@ export default function VendorDashboardPage() {
               Active Products
             </p>
             <p className="font-serif text-2xl sm:text-3xl text-[#221a16] font-bold mt-2">
-              28 Items
+              {productsCount} Items
             </p>
           </div>
           <div className="mt-4 flex items-center gap-1.5 text-[13px] text-[#5e584f] font-medium pt-3 border-t border-[#f0dfd8]/50">
@@ -247,7 +494,7 @@ export default function VendorDashboardPage() {
             <p className="text-[13px] font-bold text-[#221a16] leading-snug">
               Manage Products
             </p>
-            <p className="text-[12px] text-[#50453e]">28 live items</p>
+            <p className="text-[12px] text-[#50453e]">{productsCount} live items</p>
           </div>
         </Link>
 
@@ -297,8 +544,8 @@ export default function VendorDashboardPage() {
           </div>
 
           <div className="overflow-x-auto -mx-5 sm:mx-0 px-5 sm:px-0">
-            <table className="w-full text-left border-collapse min-w-[620px]">
-              <thead className="bg-[#fff1eb] text-[#50453e] text-[11px] font-bold uppercase tracking-wider">
+            <table className="w-full text-left border-collapse min-w-0 sm:min-w-[620px]">
+              <thead className="hidden sm:table-header-group bg-[#fff1eb] text-[#50453e] text-[11px] font-bold uppercase tracking-wider">
                 <tr>
                   <th className="py-3 px-3.5 rounded-l-lg">Order &amp; Customer</th>
                   <th className="py-3 px-3">Items</th>
@@ -307,47 +554,71 @@ export default function VendorDashboardPage() {
                   <th className="py-3 px-3.5 text-right rounded-r-lg">Action</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#f0dfd8]/40 text-[#221a16] text-[13px]">
+              <tbody className="divide-y-0 sm:divide-y divide-[#f0dfd8]/40 text-[#221a16] text-[13px]">
                 {orders.map((order) => (
                   <tr
                     key={order.id}
-                    className="hover:bg-[#fff1eb]/50 transition-colors"
+                    className="flex flex-col gap-3 p-4 border rounded-lg mb-4 bg-white sm:table-row sm:gap-0 sm:p-0 sm:border-0 sm:rounded-none sm:mb-0 sm:bg-transparent hover:bg-[#fff1eb]/50 transition-colors"
                   >
-                    <td className="py-3.5 px-3.5">
-                      <div className="font-bold text-[#221a16]">{order.id}</div>
+                    <td className="flex flex-col gap-2 sm:table-cell sm:py-3.5 sm:px-3.5">
+                      <div className="flex items-center justify-between gap-3">
+                        <div className="font-bold text-[#221a16] whitespace-nowrap">{order.id}</div>
+                        <div className="sm:hidden">
+                          {order.status === "Ready to Dispatch" && (
+                            <span className="inline-flex items-center justify-center gap-1 whitespace-nowrap px-2.5 py-0.5 rounded-full bg-[#fedab1] text-[#795e3d] text-[11px] font-bold uppercase tracking-wider">
+                              Ready to Dispatch
+                            </span>
+                          )}
+                          {order.status === "In Transit" && (
+                            <span className="inline-flex items-center justify-center gap-1 whitespace-nowrap px-2.5 py-0.5 rounded-full bg-[#f6e5de] text-[#50453e] text-[11px] font-bold uppercase tracking-wider">
+                              In Transit
+                            </span>
+                          )}
+                          {order.status === "Dispatched" && (
+                            <span className="inline-flex items-center justify-center gap-1 whitespace-nowrap px-2.5 py-0.5 rounded-full bg-[#e8f5e9] text-[#2e7d32] text-[11px] font-bold uppercase tracking-wider">
+                              Dispatched
+                            </span>
+                          )}
+                          {order.status === "Delivered" && (
+                            <span className="inline-flex items-center justify-center gap-1 whitespace-nowrap px-2.5 py-0.5 rounded-full bg-[#e8f5e9] text-[#2e7d32] text-[11px] font-bold uppercase tracking-wider">
+                              Delivered
+                            </span>
+                          )}
+                        </div>
+                      </div>
                       <div className="text-[12px] text-[#50453e]">
                         {order.customerName} • {order.customerLocation}
                       </div>
                     </td>
-                    <td className="py-3.5 px-3 text-[#50453e] font-medium">
+                    <td className="flex flex-col sm:table-cell sm:py-3.5 sm:px-3 text-[#50453e] font-medium">
                       {order.item}
                     </td>
-                    <td className="py-3.5 px-3 font-serif font-bold text-[#221a16] text-[15px]">
+                    <td className="flex flex-col sm:table-cell sm:py-3.5 sm:px-3 font-serif font-bold text-[#221a16] text-[15px]">
                       ₦{order.amount.toLocaleString()}
                     </td>
-                    <td className="py-3.5 px-3">
+                    <td className="hidden sm:table-cell sm:py-3.5 sm:px-3">
                       {order.status === "Ready to Dispatch" && (
-                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#fedab1] text-[#795e3d] text-[11px] font-bold uppercase tracking-wider">
+                        <span className="inline-flex items-center justify-center gap-1 whitespace-nowrap px-2.5 py-0.5 rounded-full bg-[#fedab1] text-[#795e3d] text-[11px] font-bold uppercase tracking-wider">
                           Ready to Dispatch
                         </span>
                       )}
                       {order.status === "In Transit" && (
-                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#f6e5de] text-[#50453e] text-[11px] font-bold uppercase tracking-wider">
+                        <span className="inline-flex items-center justify-center gap-1 whitespace-nowrap px-2.5 py-0.5 rounded-full bg-[#f6e5de] text-[#50453e] text-[11px] font-bold uppercase tracking-wider">
                           In Transit
                         </span>
                       )}
                       {order.status === "Dispatched" && (
-                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#e8f5e9] text-[#2e7d32] text-[11px] font-bold uppercase tracking-wider">
+                        <span className="inline-flex items-center justify-center gap-1 whitespace-nowrap px-2.5 py-0.5 rounded-full bg-[#e8f5e9] text-[#2e7d32] text-[11px] font-bold uppercase tracking-wider">
                           Dispatched
                         </span>
                       )}
                       {order.status === "Delivered" && (
-                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#e8f5e9] text-[#2e7d32] text-[11px] font-bold uppercase tracking-wider">
+                        <span className="inline-flex items-center justify-center gap-1 whitespace-nowrap px-2.5 py-0.5 rounded-full bg-[#e8f5e9] text-[#2e7d32] text-[11px] font-bold uppercase tracking-wider">
                           Delivered
                         </span>
                       )}
                     </td>
-                    <td className="py-3.5 px-3.5 text-right">
+                    <td className="flex flex-col sm:table-cell sm:py-3.5 sm:px-3.5 sm:text-right">
                       {order.status === "Ready to Dispatch" && (
                         <button
                           type="button"
@@ -355,7 +626,7 @@ export default function VendorDashboardPage() {
                             setSelectedOrder(order);
                             setModalType("dispatch");
                           }}
-                          className="px-3 py-1.5 rounded-md bg-[#8c6a53] text-white text-[11px] font-bold uppercase tracking-wider hover:bg-[#71523c] transition-colors shadow-2xs"
+                          className="inline-flex items-center justify-center whitespace-nowrap w-full sm:w-auto px-3 py-1.5 rounded-md bg-[#8c6a53] text-white text-[11px] font-bold uppercase tracking-wider hover:bg-[#71523c] transition-colors shadow-2xs"
                         >
                           Dispatch
                         </button>
@@ -367,7 +638,7 @@ export default function VendorDashboardPage() {
                             setSelectedOrder(order);
                             setModalType("track");
                           }}
-                          className="px-3 py-1.5 rounded-md bg-[#fceae3] text-[#221a16] text-[11px] font-bold uppercase tracking-wider hover:bg-[#f0dfd8] transition-colors"
+                          className="inline-flex items-center justify-center whitespace-nowrap w-full sm:w-auto px-3 py-1.5 rounded-md bg-[#fceae3] text-[#221a16] text-[11px] font-bold uppercase tracking-wider hover:bg-[#f0dfd8] transition-colors"
                         >
                           Track GIGM
                         </button>
@@ -379,7 +650,7 @@ export default function VendorDashboardPage() {
                             setSelectedOrder(order);
                             setModalType("receipt");
                           }}
-                          className="px-3 py-1.5 rounded-md bg-[#fceae3] text-[#221a16] text-[11px] font-bold uppercase tracking-wider hover:bg-[#f0dfd8] transition-colors"
+                          className="inline-flex items-center justify-center whitespace-nowrap w-full sm:w-auto px-3 py-1.5 rounded-md bg-[#fceae3] text-[#221a16] text-[11px] font-bold uppercase tracking-wider hover:bg-[#f0dfd8] transition-colors"
                         >
                           Receipt
                         </button>
@@ -391,7 +662,7 @@ export default function VendorDashboardPage() {
                             setSelectedOrder(order);
                             setModalType("receipt");
                           }}
-                          className="px-3 py-1.5 rounded-md bg-[#fceae3] text-[#221a16] text-[11px] font-bold uppercase tracking-wider hover:bg-[#f0dfd8] transition-colors"
+                          className="inline-flex items-center justify-center whitespace-nowrap w-full sm:w-auto px-3 py-1.5 rounded-md bg-[#fceae3] text-[#221a16] text-[11px] font-bold uppercase tracking-wider hover:bg-[#f0dfd8] transition-colors"
                         >
                           View
                         </button>
@@ -413,7 +684,7 @@ export default function VendorDashboardPage() {
                 Products by Category
               </h4>
               <span className="text-[11px] font-bold text-[#50453e] uppercase tracking-wider">
-                28 Total
+                {productsCount} Total
               </span>
             </div>
 
@@ -423,7 +694,7 @@ export default function VendorDashboardPage() {
                   Tracksuits &amp; Co-ords
                 </span>
                 <span className="font-serif font-bold text-[14px] text-[#71523c]">
-                  12 items
+                  {tracksuitsCount} items
                 </span>
               </div>
 
@@ -432,7 +703,7 @@ export default function VendorDashboardPage() {
                   Tees &amp; Everyday Tops
                 </span>
                 <span className="font-serif font-bold text-[14px] text-[#71523c]">
-                  8 items
+                  {teesCount} items
                 </span>
               </div>
 
@@ -441,7 +712,7 @@ export default function VendorDashboardPage() {
                   Denim &amp; Cargo Jeans
                 </span>
                 <span className="font-serif font-bold text-[14px] text-[#71523c]">
-                  5 items
+                  {denimCount} items
                 </span>
               </div>
 
@@ -450,7 +721,7 @@ export default function VendorDashboardPage() {
                   Shorts &amp; Sets
                 </span>
                 <span className="font-serif font-bold text-[14px] text-[#71523c]">
-                  3 items
+                  {shortsCount} items
                 </span>
               </div>
             </div>
@@ -501,7 +772,6 @@ export default function VendorDashboardPage() {
                 {modalType === "track" && `Courier Transit: ${selectedOrder?.id}`}
                 {modalType === "receipt" && `Order Summary: ${selectedOrder?.id}`}
                 {modalType === "waybill" && "Print Waybill Manifest Slips"}
-                {modalType === "ledger" && "Atelier Financial Ledger (March 2026)"}
               </h3>
               <button
                 type="button"
@@ -662,48 +932,6 @@ export default function VendorDashboardPage() {
                   >
                     <Printer className="w-4 h-4" />
                     Print Slips
-                  </button>
-                </div>
-              </div>
-            )}
-
-            {modalType === "ledger" && (
-              <div className="space-y-4 text-[13px]">
-                <p className="text-[#50453e]">
-                  Styled by Uriel Atelier Ledger export for <strong>March 2026</strong>.
-                </p>
-                <div className="p-3 bg-[#fff1eb] rounded-xl space-y-1.5 font-mono text-[12px]">
-                  <div className="flex justify-between">
-                    <span>Gross Sales:</span>
-                    <span className="font-bold">₦3,840,000.00</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Fulfilled Orders:</span>
-                    <span className="font-bold">142</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Gateway:</span>
-                    <span className="text-[#34A853] font-bold">Flutterwave Verified</span>
-                  </div>
-                </div>
-                <div className="flex justify-end gap-2 pt-2">
-                  <button
-                    type="button"
-                    onClick={() => setModalType(null)}
-                    className="px-4 py-2 rounded-lg border border-[#f0dfd8] text-[#50453e] font-semibold"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      showToast("Ledger CSV downloaded successfully.");
-                      setModalType(null);
-                    }}
-                    className="px-4 py-2 rounded-lg bg-[#8c6a53] text-white font-bold hover:bg-[#71523c] flex items-center gap-1.5"
-                  >
-                    <Download className="w-4 h-4" />
-                    Download CSV
                   </button>
                 </div>
               </div>

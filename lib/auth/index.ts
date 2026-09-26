@@ -1,35 +1,33 @@
-import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { createServerSupabaseClient } from "@/lib/supabase/server";
 
 export interface VendorSession {
   userId: string;
   email: string;
   role: "vendor";
-  iat: number;
 }
 
 /**
- * Validates vendor session on the server.
+ * Validates vendor session on the server via Supabase Auth.
  * Used inside Server Components and API Route Handlers.
  */
 export async function getVendorSession(): Promise<VendorSession | null> {
-  const cookieStore = await cookies();
-  const sessionCookie = cookieStore.get("sbu_vendor_session");
-
-  if (!sessionCookie?.value) {
-    return null;
-  }
-
   try {
-    const session = JSON.parse(
-      Buffer.from(sessionCookie.value, "base64").toString("utf-8")
-    ) as VendorSession;
+    const supabase = await createServerSupabaseClient();
+    const {
+      data: { user },
+      error,
+    } = await supabase.auth.getUser();
 
-    if (session.role !== "vendor" || !session.userId) {
+    if (error || !user || !user.email) {
       return null;
     }
 
-    return session;
+    return {
+      userId: user.id,
+      email: user.email,
+      role: "vendor",
+    };
   } catch {
     return null;
   }
@@ -37,7 +35,7 @@ export async function getVendorSession(): Promise<VendorSession | null> {
 
 /**
  * Enforces vendor authentication on server-side functions and API routes.
- * Throws redirect or 401 error if unauthorized.
+ * Throws redirect to /login if unauthorized.
  */
 export async function requireVendor(): Promise<VendorSession> {
   const session = await getVendorSession();

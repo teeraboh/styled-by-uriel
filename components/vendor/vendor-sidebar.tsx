@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import {
@@ -14,6 +15,9 @@ import {
   X,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useVendorCatalogStore } from "@/store/vendor-catalog";
+
+import { logoutAction } from "@/lib/auth/actions";
 
 interface VendorSidebarProps {
   isOpen?: boolean;
@@ -23,6 +27,17 @@ interface VendorSidebarProps {
 export function VendorSidebar({ isOpen, onClose }: VendorSidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
+  const productsCount = useVendorCatalogStore((state) => state.products.length);
+
+  useEffect(() => {
+    if (isOpen) {
+      const originalOverflow = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+      return () => {
+        document.body.style.overflow = originalOverflow;
+      };
+    }
+  }, [isOpen]);
 
   const navItems = [
     {
@@ -32,7 +47,7 @@ export function VendorSidebar({ isOpen, onClose }: VendorSidebarProps) {
       active: pathname === "/dashboard",
     },
     {
-      label: "Products (28)",
+      label: `Products (${productsCount})`,
       href: "/dashboard/products",
       icon: Shirt,
       active: pathname.startsWith("/dashboard/products"),
@@ -51,18 +66,12 @@ export function VendorSidebar({ isOpen, onClose }: VendorSidebarProps) {
     },
   ];
 
-  const handleLogout = () => {
-    document.cookie = "sbu_vendor_session=; path=/; max-age=0; SameSite=Lax;";
-    if (onClose) onClose();
-    router.push("/login");
-  };
-
   return (
     <>
       {/* Mobile Backdrop */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black/40 backdrop-blur-xs z-40 lg:hidden transition-opacity"
+          className="fixed inset-0 bg-black/40 backdrop-blur-xs z-[95] lg:hidden transition-opacity"
           onClick={onClose}
           aria-hidden="true"
         />
@@ -71,7 +80,7 @@ export function VendorSidebar({ isOpen, onClose }: VendorSidebarProps) {
       {/* Sidebar Aside */}
       <aside
         className={cn(
-          "fixed left-0 top-0 h-screen w-72 bg-[#fff1eb] z-50 flex flex-col justify-between shadow-[0_1px_8px_rgba(0,0,0,0.04)] transition-transform duration-300 ease-in-out border-r border-[#f0dfd8]/60",
+          "fixed left-0 top-0 h-screen w-72 bg-[#fff1eb] z-[100] flex flex-col justify-between shadow-[0_1px_8px_rgba(0,0,0,0.04)] transition-transform duration-300 ease-in-out border-r border-[#f0dfd8]/60",
           isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
         )}
       >
@@ -115,6 +124,13 @@ export function VendorSidebar({ isOpen, onClose }: VendorSidebarProps) {
 
           {/* Navigation Links */}
           <nav className="flex flex-col gap-1.5 px-3 mt-4" aria-label="Vendor navigation">
+            <Link
+              href="/dashboard/products/new"
+              onClick={onClose}
+              className="lg:hidden flex items-center justify-center gap-2 mb-2 px-3.5 py-2.5 rounded-lg bg-[#8c6a53] text-[#fff5f0] text-[13px] font-bold uppercase tracking-wider hover:bg-[#71523c] transition-colors shadow-xs"
+            >
+              <span>+ Add New Product</span>
+            </Link>
             {navItems.map((item) => {
               const Icon = item.icon;
               return (
@@ -170,15 +186,17 @@ export function VendorSidebar({ isOpen, onClose }: VendorSidebarProps) {
             </div>
           </div>
 
-          {/* Logout Button */}
-          <button
-            type="button"
-            onClick={handleLogout}
-            className="flex items-center justify-center gap-2 w-full py-2.5 px-3 rounded-lg text-xs font-bold uppercase tracking-wider text-[#ba1a1a] hover:bg-[#ffdad6]/50 transition-colors border border-[#ffdad6]/60"
-          >
-            <LogOut className="w-3.5 h-3.5" />
-            <span>Sign Out of Atelier</span>
-          </button>
+          {/* Logout Button (Server Action) */}
+          <form action={logoutAction} className="w-full">
+            <button
+              type="submit"
+              onClick={onClose}
+              className="flex items-center justify-center gap-2 w-full py-2.5 px-3 rounded-lg text-xs font-bold uppercase tracking-wider text-[#ba1a1a] hover:bg-[#ffdad6]/50 transition-colors border border-[#ffdad6]/60 cursor-pointer"
+            >
+              <LogOut className="w-3.5 h-3.5" />
+              <span>Logout</span>
+            </button>
+          </form>
         </div>
       </aside>
     </>

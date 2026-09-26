@@ -15,6 +15,7 @@ export interface Category {
 export interface Product {
   id: string;
   name: string;
+  slug: string;
   description: string;
   price: number;
   category_id: string;
@@ -46,7 +47,12 @@ export interface ProductVariation {
   availability: boolean;
 }
 
-// ── Order Domain ──
+export type DeliveryStatus =
+  | "confirmed"
+  | "dispatched"
+  | "in_transit"
+  | "delayed"
+  | "delivered";
 
 export interface Order {
   id: string;
@@ -56,6 +62,7 @@ export interface Order {
   delivery_address: string;
   total_amount: number;
   payment_status: PaymentStatus;
+  delivery_status?: DeliveryStatus;
   flutterwave_reference: string | null;
   customer_id: string | null; // nullable — reserved for future V2 customer accounts
   created_at: string;
@@ -81,6 +88,7 @@ export interface OrderItem {
 
 export interface CartItem {
   productId: string;
+  slug?: string;
   name: string;
   price: number;
   quantity: number;
@@ -94,8 +102,20 @@ export interface CartState {
   items: CartItem[];
   lastAdded: CartItem | null;
   addItem: (item: CartItem) => void;
-  removeItem: (productId: string, variationId: string | null) => void;
-  updateQuantity: (productId: string, variationId: string | null, quantity: number) => void;
+  buyNow: (item: CartItem) => void;
+  removeItem: (
+    productId: string,
+    variationId: string | null,
+    selectedSize?: string | null,
+    selectedColour?: string | null
+  ) => void;
+  updateQuantity: (
+    productId: string,
+    variationId: string | null,
+    quantity: number,
+    selectedSize?: string | null,
+    selectedColour?: string | null
+  ) => void;
   clearCart: () => void;
   clearLastAdded: () => void;
   getTotalItems: () => number;

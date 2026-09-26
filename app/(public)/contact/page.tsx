@@ -1,22 +1,11 @@
 import {
   Heart,
-  Store,
-  Phone,
-  MapPin,
-  Clock,
-  Shirt,
-  Compass,
   Mail,
   Truck,
   Plane,
   Map,
-  Info,
-  Navigation,
-  CheckCircle2,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import FaqAccordion from "@/components/contact/faq-accordion";
-import { StoreLocationMapLoader } from "@/components/location/store-location-map-loader";
 
 function InstagramIcon({ className = "w-4 h-4" }: { className?: string }) {
   return (
@@ -27,9 +16,9 @@ function InstagramIcon({ className = "w-4 h-4" }: { className?: string }) {
 }
 
 export const metadata = {
-  title: "Visit Our Aba Showroom | Styled by Uriel",
+  title: "Contact Us & Support | Styled by Uriel",
   description:
-    "Visit our flagship showroom at Enyimba Market Hub, Aba for live child fittings, fabric touch-and-feel, and local order pickups.",
+    "Get in touch with Styled by Uriel for customer orders, sizing guidance, and tracked nationwide delivery across Nigeria.",
 };
 
 export default function ContactPage() {
@@ -43,20 +32,21 @@ export default function ContactPage() {
         {/* ── 1. Hero / Intro Section ── */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-10">
           <div className="flex flex-col items-center text-center max-w-3xl mx-auto">
-            <div className="inline-flex items-center gap-2 bg-brand-ivory px-4 py-1.5 rounded-full mb-3 border border-brand-beige/60">
-              <Heart className="w-3.5 h-3.5 text-brand-warm-brown fill-brand-warm-brown" />
-              <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-brand-warm-brown">
-                CRAFTED IN ABA • SHIPPED NATIONWIDE
+            <div className="flex items-center gap-2 mb-3">
+              <span className="w-8 h-px bg-primary" />
+              <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-primary">
+                Crafted in Aba • Shipped Nationwide
               </span>
+              <span className="w-8 h-px bg-primary" />
             </div>
 
-            <h1 className="font-display text-4xl sm:text-5xl lg:text-[42px] lg:leading-[48px] text-brand-dark-brown font-bold tracking-tight mb-3">
-              Visit Our Aba Showroom &amp; Hub
+            <h1 className="font-display text-3xl sm:text-4xl lg:text-[42px] text-on-surface font-semibold tracking-tight leading-tight mb-3">
+              Contact &amp; Customer Support
             </h1>
 
-            <p className="text-sm sm:text-base text-on-surface-variant max-w-2xl leading-relaxed font-medium">
-              Experience Styled by Uriel in person. Visit our physical showroom at Enyimba Market
-              Hub, Aba for live fittings, fabric touch-and-feel, and local order pickups.
+            <p className="text-sm sm:text-base text-on-surface-variant max-w-2xl leading-relaxed">
+              Have questions about your order, sizing, or nationwide delivery? Reach out directly
+              to our dedicated support desk.
             </p>
 
             {/* Decorative cursive flourish */}
@@ -70,160 +60,7 @@ export default function ContactPage() {
           </div>
         </section>
 
-        {/* ── 2. Flagship Physical Location Showroom Card ── */}
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
-          <div className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-brand-beige/70">
-            {/* Header row */}
-            <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 pb-6 border-b border-brand-beige/60">
-              <div>
-                <div className="inline-flex items-center gap-2 bg-brand-warm-brown/10 text-brand-warm-brown px-3 py-1 rounded-full text-[11px] uppercase tracking-wider font-bold mb-2">
-                  <Store className="w-4 h-4" />
-                  <span>Flagship Store &amp; Logistics Hub</span>
-                </div>
-                <h2 className="font-display text-xl sm:text-2xl text-brand-dark-brown font-bold">
-                  Physical Location &amp; Flagship Showroom — Enyimba Market Hub, Aba, Abia State
-                </h2>
-                <p className="text-xs sm:text-sm text-on-surface-variant mt-1 font-medium">
-                  Walk-ins, Fitting Consultations &amp; Local Pickups Welcome
-                </p>
-              </div>
-
-              <div className="flex items-center gap-2 self-stretch lg:self-auto shrink-0">
-                <Button
-                  asChild
-                  className="bg-brand-warm-brown hover:bg-brand-warm-brown-dark text-white px-5 py-2.5 rounded-lg text-xs uppercase tracking-wider font-bold flex items-center justify-center gap-2 shadow-sm transition-all hover-lift"
-                >
-                  <a href="tel:07039315917">
-                    <Phone className="w-4 h-4" />
-                    <span>Call Showroom Desk</span>
-                  </a>
-                </Button>
-              </div>
-            </div>
-
-            {/* Grid with map + location details */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 pt-6">
-              {/* Embedded Map Column */}
-              <div className="lg:col-span-6 flex flex-col">
-                <div className="w-full h-[320px] md:h-[380px] rounded-xl overflow-hidden shadow-sm relative border border-brand-beige/80 bg-brand-sand isolate">
-                  <StoreLocationMapLoader />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent pointer-events-none" />
-
-                  <div className="absolute bottom-3 left-3 right-3 flex items-end justify-between gap-2">
-                    <div className="flex items-center gap-2 text-white pointer-events-none min-w-0">
-                      <MapPin className="w-5 h-5 text-brand-tan shrink-0" />
-                      <div className="min-w-0">
-                        <p className="font-bold text-sm md:text-base text-white">
-                          Enyimba Market Hub, Aba
-                        </p>
-                        <p className="text-[11px] text-white/80">Commercial City Center, Abia State</p>
-                      </div>
-                    </div>
-                    <a
-                      href="https://www.google.com/maps/dir/?api=1&destination=5.1079,7.3472"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 bg-brand-warm-brown text-brand-cream text-[11px] font-bold uppercase tracking-wider px-3.5 py-2 rounded-md shadow-sm hover:bg-brand-warm-brown-dark transition-colors shrink-0"
-                    >
-                      <Navigation className="w-3.5 h-3.5" />
-                      Get Directions
-                    </a>
-                  </div>
-                </div>
-
-                <p className="text-xs text-on-surface-variant mt-2.5 flex items-center gap-1.5 font-medium">
-                  <Info className="w-4 h-4 text-brand-warm-brown shrink-0" />
-                  Easy street access with dedicated retail parking space for visiting shoppers.
-                </p>
-              </div>
-
-              {/* Location Details Grid (4 boxes) */}
-              <div className="lg:col-span-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {/* 1. Address Box */}
-                <div className="p-4 rounded-xl bg-brand-cream/60 border border-brand-beige/70 flex flex-col gap-2">
-                  <div className="w-8 h-8 rounded-full bg-brand-warm-brown/10 flex items-center justify-center text-brand-warm-brown">
-                    <MapPin className="w-4 h-4" />
-                  </div>
-                  <span className="text-[11px] uppercase tracking-wider font-bold text-brand-warm-brown">
-                    Address
-                  </span>
-                  <p className="text-xs sm:text-sm text-brand-dark-brown font-semibold leading-snug">
-                    Enyimba Market Hub, Commercial City Center, Aba, Abia State, Nigeria
-                  </p>
-                  <p className="text-[11px] text-on-surface-variant mt-auto">
-                    Open for in-person shopping, fittings and direct bundle pick-ups.
-                  </p>
-                </div>
-
-                {/* 2. Showroom Hours Box */}
-                <div className="p-4 rounded-xl bg-brand-cream/60 border border-brand-beige/70 flex flex-col gap-2">
-                  <div className="w-8 h-8 rounded-full bg-brand-warm-brown/10 flex items-center justify-center text-brand-warm-brown">
-                    <Clock className="w-4 h-4" />
-                  </div>
-                  <span className="text-[11px] uppercase tracking-wider font-bold text-brand-warm-brown">
-                    Showroom Hours
-                  </span>
-                  <div className="space-y-1 text-xs">
-                    <div className="flex items-center justify-between">
-                      <span className="text-brand-dark-brown font-semibold">Mon – Sat:</span>
-                      <span className="text-brand-warm-brown font-bold">8:00 AM – 6:00 PM WAT</span>
-                    </div>
-                    <div className="flex items-center justify-between text-on-surface-variant">
-                      <span>Sunday:</span>
-                      <span className="font-medium text-error">Closed for Worship &amp; Rest</span>
-                    </div>
-                  </div>
-                  <p className="text-[11px] text-on-surface-variant mt-auto">
-                    Staffed continuously during working hours.
-                  </p>
-                </div>
-
-                {/* 3. Showroom Features Box */}
-                <div className="p-4 rounded-xl bg-brand-cream/60 border border-brand-beige/70 flex flex-col gap-2">
-                  <div className="w-8 h-8 rounded-full bg-brand-warm-brown/10 flex items-center justify-center text-brand-warm-brown">
-                    <Shirt className="w-4 h-4" />
-                  </div>
-                  <span className="text-[11px] uppercase tracking-wider font-bold text-brand-warm-brown">
-                    Showroom Features
-                  </span>
-                  <ul className="space-y-1.5 text-xs text-brand-dark-brown leading-snug">
-                    <li className="flex items-center gap-1.5">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-brand-warm-brown shrink-0" />
-                      <span>Private Kids Fitting Room</span>
-                    </li>
-                    <li className="flex items-center gap-1.5">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-brand-warm-brown shrink-0" />
-                      <span>Ready-to-wear Garment Rack</span>
-                    </li>
-                    <li className="flex items-center gap-1.5">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-brand-warm-brown shrink-0" />
-                      <span>Aba Wholesale Pickup Desk</span>
-                    </li>
-                  </ul>
-                </div>
-
-                {/* 4. Directions & Landmarks Box */}
-                <div className="p-4 rounded-xl bg-brand-cream/60 border border-brand-beige/70 flex flex-col gap-2">
-                  <div className="w-8 h-8 rounded-full bg-brand-warm-brown/10 flex items-center justify-center text-brand-warm-brown">
-                    <Compass className="w-4 h-4" />
-                  </div>
-                  <span className="text-[11px] uppercase tracking-wider font-bold text-brand-warm-brown">
-                    Directions &amp; Landmarks
-                  </span>
-                  <p className="text-xs text-brand-dark-brown font-medium leading-relaxed">
-                    Located near Aba Shopping Center, accessible via Ikot Ekpene Road &amp; Faulks
-                    Road with secured parking.
-                  </p>
-                  <p className="text-[11px] text-on-surface-variant mt-auto">
-                    Tricycle and cab drivers know Enyimba Market hub gate.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ── 3. Dual Cards: Written Inquiries & Inter-State Transit Windows ── */}
+        {/* ── 2. Dual Cards: Written Inquiries & Inter-State Transit Windows ── */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
             {/* Written Inquiries Desk (6 Cols) */}
@@ -381,7 +218,7 @@ export default function ContactPage() {
           </div>
         </section>
 
-        {/* ── 4. Frequently Asked Questions Section ── */}
+        {/* ── 3. Frequently Asked Questions Section ── */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
           <div className="bg-white rounded-2xl p-6 md:p-10 shadow-sm border border-brand-beige/70">
             <div className="text-center max-w-2xl mx-auto mb-8">
@@ -392,8 +229,8 @@ export default function ContactPage() {
                 Frequently Asked Questions
               </h2>
               <p className="text-xs sm:text-sm text-on-surface-variant mt-1.5 font-medium">
-                Everything you need to know about visiting the showroom, physical measurements for
-                kids, payments, and local pickups in Aba.
+                Everything you need to know about placing orders, physical measurements for
+                kids, payments, and tracked delivery across Nigeria.
               </p>
             </div>
 
@@ -401,7 +238,7 @@ export default function ContactPage() {
           </div>
         </section>
 
-        {/* ── 5. Bottom Editorial Script Signoff ── */}
+        {/* ── 4. Bottom Editorial Script Signoff ── */}
         <section className="w-full py-8 text-center border-t border-brand-beige/60">
           <div className="inline-flex items-center gap-2">
             <span className="font-script text-3xl sm:text-4xl text-brand-warm-brown italic font-bold">

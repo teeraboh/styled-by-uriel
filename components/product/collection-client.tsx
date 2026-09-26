@@ -5,7 +5,6 @@ import Image from "next/image";
 import Link from "next/link";
 import {
   Sparkles,
-  Ruler,
   ArrowDown,
   ArrowRight,
   CheckCircle,
@@ -16,42 +15,53 @@ import {
   RefreshCw,
   CreditCard,
   Check,
+  ShoppingBag,
 } from "lucide-react";
 import { cn, formatNaira } from "@/lib/utils";
 import { useCartStore } from "@/store/cart";
-import type { Collection, CollectionProduct } from "@/lib/collections";
+import type { Category, Product } from "@/types";
 
 interface CollectionClientProps {
-  collection: Collection;
-  collections: Collection[];
+  category: Category;
+  categories: Category[];
+  products: Product[];
 }
 
 export function CollectionClient({
-  collection,
-  collections,
+  category,
+  categories,
+  products,
 }: CollectionClientProps) {
-  const [activeFilter, setActiveFilter] = useState("all");
   const addItem = useCartStore((state) => state.addItem);
-  const [addedSlug, setAddedSlug] = useState<string | null>(null);
+  const [addedId, setAddedId] = useState<string | null>(null);
 
-  const visibleProducts =
-    activeFilter === "all"
-      ? collection.products
-      : collection.products.filter((p) => p.category === activeFilter);
+  const minPrice =
+    products.length > 0
+      ? Math.min(...products.map((p) => p.price))
+      : 25000;
 
-  const handleQuickAdd = (product: CollectionProduct) => {
+  const heroImage =
+    products[0]?.images?.[0]?.image_url ||
+    "https://lh3.googleusercontent.com/aida/AEtjO1Xgzlvx5oI4TZhJrEZglLEzJltz-LpPJ6KKwatmoNQ5wPPTpwapFY9QrpQf6NVb152Yfx7o-4VcD1yVUWbXR4ljhHRIqg9S0tF198a5TMXadgn-AKKmx2mRAfKLVJ8RLZmJ61He5sGOUIV23vlOdglwXV1Edh10UX7LwEVjsXCNLuWqwOKn5odHMRLIOdTnU8kJDFA3vY7z4iKjah3-aag8BbafBIcniNnU5yQnLu9K1PyosXdV1EPkKy8";
+
+  const heroLabel = products[0]?.name || `${category.name} Collection`;
+  const heroPrice = products[0]?.price || minPrice;
+
+  const handleQuickAdd = (product: Product) => {
+    const mainImageUrl = product.images?.[0]?.image_url || "";
     addItem({
-      productId: product.slug,
+      productId: product.id,
+      slug: product.slug,
       name: product.name,
       price: product.price,
       quantity: 1,
-      imageUrl: product.imageUrl,
+      imageUrl: mainImageUrl,
       selectedColour: null,
       selectedSize: null,
       variationId: null,
     });
-    setAddedSlug(product.slug);
-    window.setTimeout(() => setAddedSlug(null), 1500);
+    setAddedId(product.id);
+    window.setTimeout(() => setAddedId(null), 1500);
   };
 
   return (
@@ -67,14 +77,11 @@ export function CollectionClient({
               Home
             </Link>
             <span>/</span>
-            <Link
-              href="/collections"
-              className="hover:text-primary transition-colors"
-            >
-              Collections
+            <Link href="/shop" className="hover:text-primary transition-colors">
+              Shop
             </Link>
             <span>/</span>
-            <span className="text-primary font-bold">{collection.name}</span>
+            <span className="text-primary font-bold">{category.name}</span>
           </nav>
           <div className="flex items-center gap-2 text-xs text-on-surface-variant">
             <span className="inline-flex items-center gap-1 bg-surface-container-high px-2 py-0.5 rounded text-[11px] font-bold tracking-wider text-primary">
@@ -95,22 +102,28 @@ export function CollectionClient({
           <div className="lg:col-span-7 flex flex-col items-start gap-4">
             <div className="inline-flex items-center gap-2 bg-surface-container-high px-3 py-1 rounded-full text-on-surface-variant text-[11px] font-bold tracking-[0.2em] uppercase">
               <Sparkles className="w-3.5 h-3.5 text-primary" strokeWidth={1.75} />
-              {collection.edition}
+              Capsule Collection • Aba Atelier Drop • 2026 Edition
             </div>
             <h1 className="font-display text-3xl lg:text-[48px] lg:leading-[54px] text-on-surface tracking-tight font-semibold">
-              {collection.name}
+              {category.name}
             </h1>
             <p className="text-base text-on-surface-variant max-w-2xl">
-              {collection.description}
+              Tailored luxury streetwear crafted in Aba, Abia State from heavy
+              brushed cotton fleece, varsity chenille embroidery, and relaxed
+              cuts designed for active young dreamers across Nigeria.
             </p>
 
             {/* Metrics bento */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 w-full pt-1">
               {[
-                { label: "Edition", value: `${collection.products.length} Pieces` },
-                { label: "Age Range", value: collection.ageRange },
-                { label: "Pricing", value: `From ${formatNaira(collection.fromPrice)}`, accent: true },
-                { label: "Origin", value: collection.origin },
+                { label: "Edition", value: `${products.length} Pieces` },
+                { label: "Age Range", value: "2Y – 12Y" },
+                {
+                  label: "Pricing",
+                  value: `From ${formatNaira(minPrice)}`,
+                  accent: true,
+                },
+                { label: "Origin", value: "Aba, Nigeria" },
               ].map(({ label, value, accent }) => (
                 <div
                   key={label}
@@ -146,7 +159,10 @@ export function CollectionClient({
                 target="_blank"
                 className="inline-flex items-center gap-2 bg-surface-container-high text-on-surface hover:bg-surface-variant px-4 py-2.5 rounded text-[13px] font-semibold uppercase tracking-wider transition-colors"
               >
-                <MessageCircle className="w-4 h-4 text-primary" strokeWidth={1.75} />
+                <MessageCircle
+                  className="w-4 h-4 text-primary"
+                  strokeWidth={1.75}
+                />
                 Pre-order via Concierge
               </a>
             </div>
@@ -156,14 +172,18 @@ export function CollectionClient({
           <div className="lg:col-span-5 relative">
             <div className="relative bg-surface-container rounded-2xl overflow-hidden shadow-xl aspect-[4/5] p-4 group">
               <Image
-                src={collection.heroImage}
-                alt={collection.heroLabel}
+                src={heroImage}
+                alt={heroLabel}
                 fill
                 className="object-cover rounded-xl group-hover:scale-105 transition-transform duration-500"
                 sizes="(max-width: 1024px) 100vw, 40vw"
+                priority
               />
               <div className="absolute top-4 left-4 bg-surface/90 backdrop-blur-md px-3 py-1 rounded-full flex items-center gap-1 shadow-sm">
-                <BadgeCheck className="w-3.5 h-3.5 text-secondary" strokeWidth={2} />
+                <BadgeCheck
+                  className="w-3.5 h-3.5 text-secondary"
+                  strokeWidth={2}
+                />
                 <span className="text-[10px] font-bold uppercase tracking-wider text-on-surface">
                   Atelier Verified Cut
                 </span>
@@ -173,12 +193,12 @@ export function CollectionClient({
                   <span className="text-[10px] font-bold uppercase tracking-wider text-on-surface-variant">
                     Featured Editorial Look
                   </span>
-                  <span className="text-sm font-bold text-on-surface">
-                    {collection.heroLabel}
+                  <span className="text-sm font-bold text-on-surface line-clamp-1">
+                    {heroLabel}
                   </span>
                 </div>
                 <span className="text-lg font-extrabold text-primary">
-                  {formatNaira(collection.heroPrice)}
+                  {formatNaira(heroPrice)}
                 </span>
               </div>
             </div>
@@ -186,35 +206,11 @@ export function CollectionClient({
         </div>
       </section>
 
-      {/* ── Filter tabs ── */}
-      <section className="w-full bg-surface-container-low py-4 px-4 sm:px-6 lg:px-8 sticky top-20 z-30 shadow-sm backdrop-blur-md">
-        <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
-          <div className="flex items-center gap-2 overflow-x-auto pb-1 max-w-full [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-            {collection.filters.map((filter) => (
-              <button
-                key={filter.id}
-                type="button"
-                onClick={() => setActiveFilter(filter.id)}
-                className={cn(
-                  "px-4 py-1.5 rounded-full text-[13px] font-semibold uppercase tracking-wider whitespace-nowrap transition-all",
-                  activeFilter === filter.id
-                    ? "bg-primary-container text-on-primary-container shadow-sm"
-                    : "bg-surface-container text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high"
-                )}
-              >
-                {filter.label}
-              </button>
-            ))}
-          </div>
-          <div className="flex items-center gap-1 text-[11px] font-bold uppercase tracking-wider text-on-surface-variant">
-            <Ruler className="w-4 h-4 text-secondary" strokeWidth={1.75} />
-            Filter: Ready-to-wear
-          </div>
-        </div>
-      </section>
-
       {/* ── Product grid ── */}
-      <section className="w-full py-12 px-4 sm:px-6 lg:px-8 bg-surface" id="collection-grid">
+      <section
+        className="w-full py-12 px-4 sm:px-6 lg:px-8 bg-surface"
+        id="collection-grid"
+      >
         <div className="max-w-7xl mx-auto flex flex-col gap-10">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-2">
             <div>
@@ -222,7 +218,7 @@ export function CollectionClient({
                 Drop Catalog
               </span>
               <h2 className="font-display text-3xl text-on-surface tracking-tight font-semibold">
-                The {collection.products.length} Foundational Silhouettes
+                The {products.length} Foundational Silhouettes
               </h2>
             </div>
             <p className="text-sm text-on-surface-variant max-w-md">
@@ -231,77 +227,101 @@ export function CollectionClient({
             </p>
           </div>
 
-          {visibleProducts.length === 0 ? (
-            <div className="text-center py-20">
-              <p className="text-on-surface-variant text-base">
+          {products.length === 0 ? (
+            <div className="text-center py-20 bg-surface-container-low rounded-2xl p-8 border border-outline-variant/20">
+              <ShoppingBag className="w-12 h-12 text-on-surface-variant mx-auto mb-3 opacity-60" />
+              <p className="text-on-surface text-base font-semibold">
                 No pieces in this category yet.
               </p>
+              <p className="text-xs text-on-surface-variant mt-1">
+                New drops are being tailored at the Aba atelier.
+              </p>
+              <Link
+                href="/shop"
+                className="mt-5 inline-flex items-center gap-2 bg-primary-container text-on-primary-container hover:bg-primary hover:text-on-primary px-4 py-2 rounded text-xs font-semibold uppercase tracking-wider transition-colors"
+              >
+                Browse All Products
+              </Link>
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {visibleProducts.map((product) => (
-                <article
-                  key={product.slug}
-                  className="flex flex-col bg-surface-container-low rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300 group"
-                >
-                  <div className="relative aspect-square w-full bg-surface-container overflow-hidden">
-                    <Image
-                      src={product.imageUrl}
-                      alt={product.name}
-                      fill
-                      className="object-cover object-center group-hover:scale-105 transition-transform duration-500"
-                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    />
-                    {product.badge && (
-                      <span className="absolute top-3 left-3 bg-secondary text-on-secondary text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider">
-                        {product.badge}
-                      </span>
-                    )}
-                  </div>
+              {products.map((product) => {
+                const mainImage =
+                  product.images && product.images.length > 0
+                    ? product.images[0].image_url
+                    : "";
 
-                  <div className="p-4 flex flex-col flex-1 justify-between gap-4">
-                    <div>
-                      <div className="flex items-center justify-between text-xs text-on-surface-variant mb-1">
-                        <span>{product.colour}</span>
-                      </div>
-                      <h3 className="text-lg font-bold text-on-surface uppercase group-hover:text-primary transition-colors">
-                        {product.name}
-                      </h3>
-                      <p className="text-xs text-on-surface-variant mt-1">
-                        {product.description}
-                      </p>
-                      <div className="flex flex-wrap gap-1.5 mt-3">
-                        {product.sizes.map((size) => (
-                          <span
-                            key={size}
-                            className="px-2 py-0.5 bg-surface rounded text-[11px] font-semibold text-on-surface-variant"
-                          >
-                            {size}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
+                return (
+                  <article
+                    key={product.id}
+                    className="flex flex-col bg-surface-container-low rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300 group border border-outline-variant/10"
+                  >
+                    <Link
+                      href={`/product/${product.slug}`}
+                      className="relative aspect-square w-full bg-surface-container overflow-hidden block"
+                    >
+                      {mainImage ? (
+                        <Image
+                          src={mainImage}
+                          alt={product.name}
+                          fill
+                          className="object-cover object-center group-hover:scale-105 transition-transform duration-500"
+                          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-on-surface-variant text-sm">
+                          No Image
+                        </div>
+                      )}
+                    </Link>
 
-                    <div className="pt-3 flex items-center justify-between gap-3">
+                    <div className="p-4 flex flex-col flex-1 justify-between gap-4">
                       <div>
-                        <span className="block text-[10px] font-bold uppercase tracking-wider text-on-surface-variant">
-                          Nigeria Naira
-                        </span>
-                        <span className="text-[22px] font-extrabold text-on-surface">
-                          {formatNaira(product.price)}
-                        </span>
+                        <div className="flex items-center justify-between text-xs text-on-surface-variant mb-1">
+                          <span>{category.name}</span>
+                          {!product.availability && (
+                            <span className="text-destructive font-semibold">
+                              Out of Stock
+                            </span>
+                          )}
+                        </div>
+                        <Link href={`/product/${product.slug}`}>
+                          <h3 className="text-lg font-bold text-on-surface uppercase group-hover:text-primary transition-colors line-clamp-1">
+                            {product.name}
+                          </h3>
+                        </Link>
+                        <p className="text-xs text-on-surface-variant mt-1 line-clamp-2">
+                          {product.description}
+                        </p>
                       </div>
-                      <button
-                        type="button"
-                        onClick={() => handleQuickAdd(product)}
-                        className="bg-secondary-container hover:bg-secondary text-secondary hover:text-on-secondary px-4 py-2 rounded text-[13px] font-semibold uppercase tracking-wider transition-colors inline-flex items-center gap-1 shadow-sm"
-                      >
-                        {addedSlug === product.slug ? "Added ✓" : "Quick Add"}
-                      </button>
+
+                      <div className="pt-3 flex items-center justify-between gap-3 border-t border-outline-variant/10">
+                        <div>
+                          <span className="block text-[10px] font-bold uppercase tracking-wider text-on-surface-variant">
+                            Nigeria Naira
+                          </span>
+                          <span className="text-[22px] font-extrabold text-on-surface">
+                            {formatNaira(product.price)}
+                          </span>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => handleQuickAdd(product)}
+                          disabled={!product.availability}
+                          className={cn(
+                            "px-4 py-2 rounded text-[13px] font-semibold uppercase tracking-wider transition-colors inline-flex items-center gap-1 shadow-sm",
+                            product.availability
+                              ? "bg-secondary-container hover:bg-secondary text-secondary hover:text-on-secondary"
+                              : "bg-surface-container-highest text-on-surface-variant opacity-50 cursor-not-allowed"
+                          )}
+                        >
+                          {addedId === product.id ? "Added ✓" : "Quick Add"}
+                        </button>
+                      </div>
                     </div>
-                  </div>
-                </article>
-              ))}
+                  </article>
+                );
+              })}
             </div>
           )}
         </div>
@@ -393,7 +413,7 @@ export function CollectionClient({
         </div>
       </section>
 
-      {/* ── Capsule switcher ── */}
+      {/* ── Category switcher ── */}
       <section className="w-full py-12 px-4 sm:px-6 lg:px-8 bg-surface">
         <div className="max-w-7xl mx-auto flex flex-col gap-6">
           <div className="flex flex-col items-start gap-1">
@@ -401,12 +421,13 @@ export function CollectionClient({
               Explore The Universe
             </span>
             <h2 className="font-display text-3xl text-on-surface tracking-tight font-semibold">
-              Four Curated Drops For 2026
+              Curated Atelier Categories
             </h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {collections.map((item, index) => {
-              const isActive = item.slug === collection.slug;
+            {categories.map((item, index) => {
+              const isActive =
+                item.slug.toLowerCase() === category.slug.toLowerCase();
               const inner = (
                 <>
                   <div className="flex items-center justify-between">
@@ -416,7 +437,7 @@ export function CollectionClient({
                         isActive ? "text-primary" : "text-on-surface-variant"
                       )}
                     >
-                      Capsule 0{index + 1}
+                      Category 0{index + 1}
                     </span>
                     {isActive ? (
                       <span className="px-2 py-0.5 rounded-full bg-primary text-on-primary text-[10px] font-bold uppercase tracking-wider">
@@ -430,15 +451,15 @@ export function CollectionClient({
                     )}
                   </div>
                   <div>
-                    <h4 className="text-lg font-bold text-on-surface">{item.name}</h4>
+                    <h4 className="text-lg font-bold text-on-surface">
+                      {item.name}
+                    </h4>
                     <p className="text-xs text-on-surface-variant mt-1">
-                      {item.description}
+                      Explore our handcrafted {item.name.toLowerCase()} range.
                     </p>
                   </div>
                   <div className="pt-2 flex items-center justify-between text-[13px] font-semibold">
-                    <span className="text-primary font-bold">
-                      From {formatNaira(item.fromPrice)}
-                    </span>
+                    <span className="text-primary font-bold">Explore Drop</span>
                     {isActive && (
                       <Check className="w-4 h-4 text-primary" strokeWidth={2} />
                     )}
@@ -471,15 +492,36 @@ export function CollectionClient({
       <section className="w-full bg-surface-container-low py-6 px-4 sm:px-6 lg:px-8 border-t border-outline-variant/20">
         <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {[
-            { icon: Truck, title: "Nationwide Dispatch", text: "Direct dispatch from Aba" },
-            { icon: CheckCircle, title: "Skin-Safe Textiles", text: "Soft natural cotton fleece" },
-            { icon: Ruler, title: "Exact Sizing", text: "Direct size check on WhatsApp" },
-            { icon: CreditCard, title: "Seamless Payment", text: "Card checkout via Flutterwave" },
+            {
+              icon: Truck,
+              title: "Nationwide Dispatch",
+              text: "Direct dispatch from Aba",
+            },
+            {
+              icon: CheckCircle,
+              title: "Skin-Safe Textiles",
+              text: "Soft natural cotton fleece",
+            },
+            {
+              icon: Sparkles,
+              title: "Exact Sizing",
+              text: "Direct size check on WhatsApp",
+            },
+            {
+              icon: CreditCard,
+              title: "Seamless Payment",
+              text: "Card checkout via Flutterwave",
+            },
           ].map(({ icon: Icon, title, text }) => (
             <div key={title} className="flex items-center gap-3 p-2">
-              <Icon className="w-7 h-7 text-primary shrink-0" strokeWidth={1.75} />
+              <Icon
+                className="w-7 h-7 text-primary shrink-0"
+                strokeWidth={1.75}
+              />
               <div className="flex flex-col">
-                <span className="text-sm font-bold text-on-surface">{title}</span>
+                <span className="text-sm font-bold text-on-surface">
+                  {title}
+                </span>
                 <span className="text-xs text-on-surface-variant">{text}</span>
               </div>
             </div>

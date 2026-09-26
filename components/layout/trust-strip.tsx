@@ -33,14 +33,14 @@ export function TrustStrip() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 lg:gap-8">
           {TRUST_ITEMS.map((item) => (
             <div key={item.title} className="flex items-center gap-3.5">
-              <div className="w-11 h-11 rounded-lg bg-brand-cream border border-brand-beige/40 flex items-center justify-center text-brand-warm-brown shrink-0">
+              <div className="w-11 h-11 rounded-lg bg-surface-container border border-brand-beige/40 flex items-center justify-center text-primary shrink-0">
                 <item.icon className="w-5 h-5" strokeWidth={1.75} />
               </div>
               <div>
-                <h3 className="text-xs sm:text-sm font-bold text-brand-dark-brown">
+                <h3 className="text-sm font-bold text-on-surface">
                   {item.title}
                 </h3>
-                <p className="text-[11px] sm:text-xs text-on-surface-variant mt-0.5">
+                <p className="text-xs text-on-surface-variant mt-0.5">
                   {item.description}
                 </p>
               </div>

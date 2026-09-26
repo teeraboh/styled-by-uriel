@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import {
-  ChevronLeft,
   MessageCircle,
   BadgeCheck,
   Heart,
@@ -22,7 +21,7 @@ import { StoreLocationMapLoader } from "@/components/location/store-location-map
 const HERO_IMAGE =
   "https://lh3.googleusercontent.com/aida-public/AB6AXuDtrq_IIFMVhOQJQJe0Ntrc7xQt9VedJqq319W6M1q8_lRniT8iJjV8fTmxcNaqI0iiaW2GkuSR77k2DXvLESLCsoGotya6KHnXzXAdLMYpiv-IFCo45t9TvcOblr-61pKoSPOlYScUBQu3deP1mbSq4w8ltz0jTyh14wMoR_kVh0vjEX-J0NJZqvzCVrzjLPOhb0Gq7bRlL-rOsk2dFw2IQtd5LQXFCbWbpVpcTufEGSr7wt0IbwhL";
 const ATELIER_IMAGE =
-  "https://lh3.googleusercontent.com/aida-public/AB6AXuDU-BQxM5fo8duKeCk2qvFeoRjnshdgQ-HQzD3XaUP9dInFDGZVad63ZxEai2pxlKZqKbK_UBurKyYjEd7iP5YvmowCygIeVbLBY3zC6Kp6AquOWN_mdyR5hAqWGdsuIpQh3XzQJKI8sMaa8WS3KcPgxfwcQ9XcnsSj5oScrJVAJJeITAJhdOY80fsubdKDRY4EEubB_oKTXFvDgRDPuEbXLcAfhnM1ZVcnGv1oRSdDQC_T9vp53l6p";
+  "https://lh3.googleusercontent.com/aida-public/AB6AXuB-6zhL61Fow1fwb1b5R0PF7lL3M5wQCaoABZLd45LFLWXkrz67wPwG_H1sW8AY8jDEWBexZ2nhRODd0WrWwMoLlKKrTpYYqzY8DtUcxk1lNXe4kcNALmm8dQIlq5yZjTzit77Lq7aniDsycjaFtsRTS4dUUripMWqlFThQHrMkJ9QsamIDqQZc8VepOPR39KQrjS4Neuy-iSsPVzkOKilXeiKHhQGHcgnYdcDhZmaDucyqFo_IYWUC";
 const FABRIC_IMAGE =
   "https://lh3.googleusercontent.com/aida-public/AB6AXuA7r-DlXkNcqeOIMlWlVxMNx7-8D_Uw0kVu7FtHhS7VbLN20AQw6iqBvpN3wCn1QqQqOE3vqTna1Fgz5Q_QYdOiUZO4trCsS5_p8NkBPsaTIUE25BTmHq53MaSkOCFVC49RNFxfeqbdlsHXAoqnbndwn1bOJjauu4qsVa6JHLYueIObYeAyRhdNfH5-kGka9FGcTNLV_TyXCp3rYbwYb-u1yoxQA9xsbwADWvC5BaUUP95OQf4_Qekj";
 const STITCH_IMAGE =
@@ -84,23 +83,23 @@ export default function AboutPage() {
   return (
     <main className="bg-surface">
       {/* ── Top Visual Story Intro ── */}
-      <section className="w-full bg-surface-container-low px-4 sm:px-6 lg:px-8 py-16 sm:py-24 overflow-hidden">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
-          <div className="lg:col-span-7 flex flex-col items-start gap-5">
-            <div className="inline-flex items-center gap-2 bg-surface-container px-4 py-1.5 rounded-full">
-              <ChevronLeft className="w-4 h-4 text-primary" strokeWidth={1.75} />
+      <section className="relative w-full bg-surface-container-low px-4 sm:px-6 lg:px-8 py-10 sm:py-14 lg:py-16 overflow-hidden">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 items-center relative z-10">
+          <div className="lg:col-span-7 flex flex-col items-start gap-3.5 sm:gap-4">
+            <div className="flex items-center gap-2">
+              <span className="w-8 h-px bg-primary" />
               <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-primary">
                 Our Heritage &amp; Purpose
               </span>
             </div>
-            <h1 className="font-display text-4xl sm:text-5xl lg:text-[60px] lg:leading-[68px] text-on-surface tracking-tight">
-              Little Styles, <br />
-              <span className="italic font-normal text-primary text-[34px] sm:text-[44px] lg:text-[58px]">
+            <h1 className="font-display text-3xl sm:text-4xl lg:text-[44px] text-on-surface font-semibold leading-tight">
+              Little Styles,{" "}
+              <span className="italic font-normal text-primary">
                 Big Stories
               </span>{" "}
               — Handcrafted in Aba.
             </h1>
-            <p className="text-lg leading-relaxed text-on-surface-variant max-w-2xl">
+            <p className="text-sm sm:text-base leading-relaxed text-on-surface-variant max-w-xl">
               Founded by{" "}
               <strong className="font-semibold text-on-surface">
                 Natasha Ezinne Amuruonyenaego
@@ -108,7 +107,7 @@ export default function AboutPage() {
               , Styled by Uriel is redefining modern African children&apos;s fashion through
               playful luxury, supreme comfort, and durable craftsmanship.
             </p>
-            <div className="flex flex-wrap items-center gap-4 pt-2">
+            <div className="flex flex-wrap items-center gap-4 pt-1 sm:pt-2">
               <Link
                 href="/shop"
                 className="inline-flex items-center gap-2 bg-primary-container text-on-primary-container hover:bg-primary hover:text-on-primary px-6 py-3 rounded-lg text-[13px] font-bold uppercase tracking-wider shadow-sm transition-all hover:scale-[1.02]"
@@ -158,6 +157,7 @@ export default function AboutPage() {
             </div>
           </div>
         </div>
+        <div className="absolute -right-16 -top-24 w-96 h-96 rounded-full bg-secondary-container/25 blur-3xl pointer-events-none" />
       </section>
 
       {/* ── Founder's Note ── */}
@@ -215,7 +215,7 @@ export default function AboutPage() {
             <h2 className="font-display text-3xl sm:text-4xl text-on-surface leading-tight">
               Rooted in Aba Craft, Designed for Modern Little Stars
             </h2>
-            <div className="space-y-4 text-base md:text-lg text-on-surface-variant leading-relaxed">
+            <div className="space-y-4 text-sm sm:text-base text-on-surface-variant leading-relaxed">
               <p>
                 <strong className="text-on-surface font-semibold">Styled by Uriel</strong>{" "}
                 started with a simple observation: children deserve clothes that feel as
@@ -243,7 +243,7 @@ export default function AboutPage() {
               <div className="flex items-center gap-4">
                 <div className="w-14 h-14 rounded-full overflow-hidden bg-surface-container shadow-md">
                   <Image
-                    src="https://lh3.googleusercontent.com/aida/AEtjO1VvOVbJ0LKWMYvToScQK0ScciqRf7HTES0WlyEMOyFWfSKZ6NjdzgGYawwpX_eENzqka7Zej__h39fRB3pxoNFTy12mhgFfst5fzYFyfmDjoREAELSSQyf_PX6jjzy_lZq98-5z1g0f_Xcz908iYW0KmnAAMM-Jq2e-5D4U96FGs76XaB9e9V9QP0CCvYaTq8xH82A8bTDkv2ydZCQekzkSsK3sqjHdSS6leXySOXEe4sejroTuC67C0wzLmZG-MTOM7_lnuhzmBg"
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuAo9qWn4kIoV0Mj9V9u0MMxFNSLvHdUvYeiaQv1vJxmVP26NaCFLVh3pOkWAfumDnCnqnRgLxku-EpKynHmAimpm_jzCjuibk0K51nWsV6I8d7dctDd1mRc7RPow9bdJ0BaAyMq6gQXWk-WLRtPyY5adZ1UuNzC9wx49ymWQ3CPX5iBVGMbuFj3CmyD7vhAabptfjBcH5RUujJt5c5nvYRTtsYCFMCziVIF7FOLknUZ-Wt8-kW1sdfxE-33Wx8FG6D3tg"
                     alt="Natasha Ezinne, temporary dev placeholder"
                     width={64}
                     height={64}
@@ -278,7 +278,7 @@ export default function AboutPage() {
             <h2 className="font-display text-3xl sm:text-4xl text-on-surface">
               The Four Pillars of Styled by Uriel
             </h2>
-            <p className="text-on-surface-variant leading-relaxed">
+            <p className="text-sm sm:text-base text-on-surface-variant leading-relaxed">
               Built on genuine tenderness for your children, authentic Nigerian craftsmanship,
               and world-class garment design.
             </p>
@@ -320,18 +320,18 @@ export default function AboutPage() {
                 Behind The Seams: Our Process
               </h2>
             </div>
-            <p className="text-on-surface-variant max-w-md">
+            <p className="text-sm sm:text-base text-on-surface-variant max-w-md leading-relaxed">
               How raw textiles in Aba transform into comfortable, statement looks for your
               little ones.
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
             {PROCESS_STEPS.map((step) => (
               <div
                 key={step.step}
-                className="flex flex-col bg-surface-container rounded-xl overflow-hidden shadow-sm"
+                className="flex flex-col bg-surface-container rounded-xl overflow-hidden shadow-sm transition-all duration-300 ease-out hover:-translate-y-1.5 hover:shadow-lg"
               >
-                <div className="h-48 w-full bg-surface-container-high overflow-hidden relative">
+                <div className="aspect-[4/3] w-full bg-surface-container-high overflow-hidden relative">
                   <Image
                     src={step.image}
                     alt={`${step.alt}, temporary dev placeholder`}
@@ -340,17 +340,21 @@ export default function AboutPage() {
                     sizes="(max-width: 768px) 100vw, 33vw"
                   />
                 </div>
-                <div className="p-6 flex flex-col gap-2">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[11px] font-bold uppercase tracking-wider text-primary">
-                      {step.step}
-                    </span>
-                    <CheckCircle className="w-5 h-5 text-primary" strokeWidth={1.75} />
+                <div className="p-6 flex flex-col flex-1">
+                  <div className="flex flex-col gap-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[11px] font-bold uppercase tracking-wider text-primary">
+                        {step.step}
+                      </span>
+                      <CheckCircle className="w-5 h-5 text-primary" strokeWidth={1.75} />
+                    </div>
+                    <h3 className="text-lg font-bold text-on-surface min-h-[3.5rem]">
+                      {step.title}
+                    </h3>
+                    <p className="text-sm text-on-surface-variant leading-relaxed">
+                      {step.desc}
+                    </p>
                   </div>
-                  <h3 className="text-lg font-bold text-on-surface">{step.title}</h3>
-                  <p className="text-sm text-on-surface-variant leading-relaxed">
-                    {step.desc}
-                  </p>
                 </div>
               </div>
             ))}
@@ -373,7 +377,7 @@ export default function AboutPage() {
               <h2 className="font-display text-3xl text-on-surface">
                 Visit or Reach Natasha Directly
               </h2>
-              <p className="text-on-surface-variant">
+              <p className="text-sm sm:text-base text-on-surface-variant leading-relaxed">
                 Have questions about child sizing, wholesale bundles, or customized styling
                 packages? Natasha and the Styled by Uriel team are just a quick message away.
               </p>
@@ -457,7 +461,7 @@ export default function AboutPage() {
                   Fast Interstate Dispatch
                 </span>
               </div>
-              <p className="text-sm text-on-surface-variant leading-relaxed">
+              <p className="text-sm sm:text-base text-on-surface-variant leading-relaxed">
                 Strategically centered in Aba to tap into authentic textile artisans, top-tier
                 seamstresses, and seamless logistics routes connecting our studio directly to
                 Lagos, Abuja, Port Harcourt, Enugu, and all Nigerian state capitals.
@@ -486,7 +490,7 @@ export default function AboutPage() {
             <h2 className="font-display text-3xl text-on-surface">
               Ready to Dress Your Little Treasure?
             </h2>
-            <p className="text-on-surface-variant">
+            <p className="text-sm sm:text-base text-on-surface-variant leading-relaxed">
               Discover our latest tracksuits, varsity-inspired polos, and durable denim
               trousers crafted right here in Aba.
             </p>

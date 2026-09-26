@@ -27,12 +27,20 @@ export const env = {
   NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000",
 } as const;
 
+function optionalEnv(name: string, fallback = ""): string {
+  return process.env[name] || fallback;
+}
+
 // ── Server-only (NEVER import from client components) ──
 
 export function getServerEnv() {
   return {
     SUPABASE_SERVICE_ROLE_KEY: requireEnv("SUPABASE_SERVICE_ROLE_KEY"),
-    FLUTTERWAVE_SECRET_KEY: requireEnv("FLUTTERWAVE_SECRET_KEY"),
-    FLUTTERWAVE_WEBHOOK_HASH: requireEnv("FLUTTERWAVE_WEBHOOK_HASH"),
+    FLUTTERWAVE_SECRET_KEY: optionalEnv("FLUTTERWAVE_SECRET_KEY"),
+    FLUTTERWAVE_WEBHOOK_HASH: optionalEnv("FLUTTERWAVE_WEBHOOK_HASH"),
+    RESEND_API_KEY: optionalEnv("RESEND_API_KEY"),
+    RESEND_TEST_EMAIL: optionalEnv("RESEND_TEST_EMAIL"),
+    VENDOR_EMAIL: optionalEnv("VENDOR_EMAIL"),
   } as const;
 }
+

@@ -8,7 +8,7 @@ export function VendorShell({ children }: { children: React.ReactNode }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-[#fff8f6] text-[#221a16] antialiased">
+    <div className="flex min-h-screen bg-[#fff8f6] text-[#221a16] antialiased">
       {/* Fixed Sidebar */}
       <VendorSidebar
         isOpen={isSidebarOpen}
@@ -16,7 +16,7 @@ export function VendorShell({ children }: { children: React.ReactNode }) {
       />
 
       {/* Main Content Area shifted right on desktop */}
-      <div className="lg:pl-72 flex flex-col min-h-screen">
+      <div className="flex-1 min-w-0 overflow-x-hidden lg:pl-72 flex flex-col min-h-screen">
         {/* Fixed Top Header */}
         <VendorHeader onMenuToggle={() => setIsSidebarOpen((prev) => !prev)} />
 

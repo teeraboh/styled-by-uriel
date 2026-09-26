@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -18,88 +18,78 @@ import {
   MoreVertical,
   CheckCircle2,
   X,
+  Trash2,
 } from "lucide-react";
-
-interface VendorProduct {
-  id: string;
-  sku: string;
-  name: string;
-  category: "tracksuits" | "tees" | "denim" | "shorts";
-  categoryLabel: string;
-  details: string;
-  price: number;
-  stock: number;
-  maxStock: number;
-  status: "Active" | "Draft" | "Low Stock";
-  imageUrl: string;
-}
-
-const PRODUCTS_DATA: VendorProduct[] = [
-  {
-    id: "prod-1",
-    sku: "SBU-TRK-01",
-    name: "Signature Up & Down Tracksuit",
-    category: "tracksuits",
-    categoryLabel: "Tracksuits & Co-ords",
-    details: "Tan / Beige • Custom Patch Details",
-    price: 25000,
-    stock: 8,
-    maxStock: 15,
-    status: "Active",
-    imageUrl: "https://lh3.googleusercontent.com/aida/AEtjO1Uc3_GlB4S9KdmUbHXlFKrHSfWTqZU4UiKu1G91NhfnYQ4iArMUhYvNfbReEQXhuin9nLk0A6jzVC0ydJhgsDjBTYGFLkkupkq3SmicTl29NrifpGKPiBYJZLMQtERiyaOxX5bcj1yaRo5zZuL5gMS4TQGkSmP5hwfQPErw0jSgfprcKXfZZ3ImEoTHpRR7lhFUA5-Jfa5rnGGYEowGSu7NDo2ct7HOcBxfmxPBb4NKPnMT6cv-8Z7Aes0",
-  },
-  {
-    id: "prod-2",
-    sku: "SBU-TEE-04",
-    name: "California Vintage Ringer Tee",
-    category: "tees",
-    categoryLabel: "Tees & Tops",
-    details: "Cream / Navy • Retro Typography",
-    price: 15000,
-    stock: 18,
-    maxStock: 25,
-    status: "Active",
-    imageUrl: "https://lh3.googleusercontent.com/aida/AEtjO1Vh4cGJWj_5j2IzXk_CCzajXd8wdeo17EabHyTsFT_5k8iC8MvXM1QwoMdXgvlcKXrcEqxhjReDXa04gDDNa32RZKTKmoU1uDOR6QRabneGpU8dw7M-0HaS03TzJEmTzwSDF2-O9d9n4UFSyDjZ-gqQKVKLyBzUj3Fj20-91c_-RstZMRsqgcxC-Oy1TpHfuDaZFBstZM-NsqGE6diZUoJQjAladQ5_XN2h5YU1gvRQmSMWCPkwmxVAS84",
-  },
-  {
-    id: "prod-3",
-    sku: "SBU-DNM-02",
-    name: "Utility Washed Cargo Jeans",
-    category: "denim",
-    categoryLabel: "Denim & Cargo",
-    details: "Charcoal Grey • Multi-Pocket",
-    price: 22000,
-    stock: 3,
-    maxStock: 20,
-    status: "Low Stock",
-    imageUrl: "https://lh3.googleusercontent.com/aida/AEtjO1XvR2EwOK9GssvNZvRU3IlE7_8fe2-_TQhF1lJLdL9CeQvL8ZxHztw9XTRf8UrAn8eXjsF9K6fd6fxvaGN_suT4F_HrhID2DqSikQlkIZn9Uf6yYb1vmKxmhEr_VXAyfr6JKOaX9rgT8fZ7ETCitdLAiATD-j4cIPjA9JQfEv6YcR1KV40JkZUnSiYAY8mYLBmU_YhwRwDEim7s0yjKujVW5exDXiXVYMxov5tWfUqNb9kfI7nGYJlFn1w",
-  },
-  {
-    id: "prod-4",
-    sku: "SBU-SHT-01",
-    name: "Aura Neutral Utility Shorts Set",
-    category: "shorts",
-    categoryLabel: "Shorts & Sets",
-    details: "Warm Sand • Drawstring Waist",
-    price: 18000,
-    stock: 12,
-    maxStock: 20,
-    status: "Active",
-    imageUrl: "https://lh3.googleusercontent.com/aida/AEtjO1UDXjfzqAqksqPYNHFa4vokcmSuTht6WSYh03W4oxuczOANXqr365M34C5t0QrgEtWqGda9mXZVAZzTB2O9YNRIuMHot95hp2qgo7W6L8eBE6HnyTX3gk8NB0nSK74SShtVRhfV4YKl3NuV6lqIdMzMDkPUKaNJEcUZcRHhgE358RsflN2sD_UpSqa40lPoI4X-bCAbFxwwM8-ckrtFDwB1-MQGm-Nicg0-Ut6mrJM-B98gBDz0kOlHtJw",
-  },
-];
+import { useVendorCatalogStore, VendorProduct } from "@/store/vendor-catalog";
+import { CustomSelect } from "@/components/vendor/custom-select";
 
 export default function VendorProductsPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("all");
-  const [products, setProducts] = useState<VendorProduct[]>(PRODUCTS_DATA);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const products = useVendorCatalogStore((state) => state.products);
+  const setProducts = useVendorCatalogStore((state) => state.setProducts);
+  const toggleStatus = useVendorCatalogStore((state) => state.toggleStatus);
+  const deleteProduct = useVendorCatalogStore((state) => state.deleteProduct);
 
   const showToast = (msg: string) => {
     setToastMessage(msg);
     setTimeout(() => setToastMessage(null), 3500);
   };
+
+  // Sync live products from Supabase on mount
+  useEffect(() => {
+    async function loadLiveProducts() {
+      try {
+        setIsLoading(true);
+        const res = await fetch("/api/products?limit=100&includeUnavailable=true");
+        if (res.ok) {
+          const data = await res.json();
+          if (Array.isArray(data.products)) {
+            const mapped: VendorProduct[] = data.products.map((p: any) => ({
+              id: p.id,
+              sku: p.slug ? p.slug.toUpperCase() : `SBU-${p.id.slice(0, 6).toUpperCase()}`,
+              name: p.name,
+              category: (p.category?.slug || "tracksuits") as "tracksuits" | "tees" | "denim" | "shorts",
+              categoryLabel: p.category?.name || "Boutique Garment",
+              details: p.description || `${p.name} • Handcrafted in Aba`,
+              price: p.price,
+              stock: p.stock_quantity ?? 0,
+              maxStock: Math.max((p.stock_quantity ?? 0) * 2, 20),
+              status: !p.availability
+                ? "Draft"
+                : (p.stock_quantity ?? 0) <= 4
+                ? "Low Stock"
+                : "Active",
+              imageUrl:
+                p.images?.[0]?.image_url ||
+                "https://lh3.googleusercontent.com/aida/AEtjO1Uc3_GlB4S9KdmUbHXlFKrHSfWTqZU4UiKu1G91NhfnYQ4iArMUhYvNfbReEQXhuin9nLk0A6jzVC0ydJhgsDjBTYGFLkkupkq3SmicTl29NrifpGKPiBYJZLMQtERiyaOxX5bcj1yaRo5zZuL5gMS4TQGkSmP5hwfQPErw0jSgfprcKXfZZ3ImEoTHpRR7lhFUA5-Jfa5rnGGYEowGSu7NDo2ct7HOcBxfmxPBb4NKPnMT6cv-8Z7Aes0",
+            }));
+            setProducts(mapped);
+          }
+        }
+      } catch (err) {
+        console.error("Error loading live products:", err);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    loadLiveProducts();
+  }, [setProducts]);
+
+  const activeCount = products.length;
+  const totalStockUnits = products.reduce((acc, p) => acc + (p.stock || 0), 0);
+  const lowStockCount = products.filter((p) => (p.stock || 0) <= 4).length;
+  const totalValuation = products.reduce((acc, p) => acc + (p.price * (p.stock || 0)), 0);
+
+  const tracksuitsCount = products.filter((p) => p.category === "tracksuits").length;
+  const teesCount = products.filter((p) => p.category === "tees").length;
+  const denimCount = products.filter((p) => p.category === "denim").length;
+  const shortsCount = products.filter((p) => p.category === "shorts").length;
 
   const filteredProducts = products.filter((prod) => {
     const matchesCategory =
@@ -114,17 +104,45 @@ export default function VendorProductsPage() {
     return matchesCategory && matchesStatus && matchesSearch;
   });
 
-  const toggleProductStatus = (id: string) => {
-    setProducts((prev) =>
-      prev.map((p) => {
-        if (p.id === id) {
-          const nextStatus = p.status === "Active" ? "Draft" : "Active";
-          showToast(`Updated "${p.name}" status to ${nextStatus}.`);
-          return { ...p, status: nextStatus };
+  const handleToggleStatus = async (id: string, name: string, currentStatus: string) => {
+    const nextAvailability = currentStatus !== "Active";
+    try {
+      const res = await fetch(`/api/products/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ availability: nextAvailability }),
+      });
+      if (res.ok) {
+        toggleStatus(id);
+        showToast(`Visibility updated for "${name}".`);
+      } else {
+        const data = await res.json();
+        showToast(data.error?.message || "Failed to update status.");
+      }
+    } catch (err) {
+      console.error("Toggle status error:", err);
+      showToast("Network error updating status.");
+    }
+  };
+
+  const handleDelete = async (id: string, name: string) => {
+    if (window.confirm(`Are you sure you want to remove "${name}" from the live catalog?`)) {
+      try {
+        const res = await fetch(`/api/products/${id}`, {
+          method: "DELETE",
+        });
+        const data = await res.json();
+        if (res.ok) {
+          deleteProduct(id);
+          showToast(`Successfully removed "${name}" from Supabase database.`);
+        } else {
+          showToast(data.error?.message || "Failed to delete product from database.");
         }
-        return p;
-      })
-    );
+      } catch (err) {
+        console.error("Delete error:", err);
+        showToast("Network error deleting product.");
+      }
+    }
   };
 
   return (
@@ -145,7 +163,7 @@ export default function VendorProductsPage() {
 
       {/* Header Section */}
       <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-4 pb-2 border-b border-[#f0dfd8]/60">
-        <div className="space-y-1">
+        <div className="flex flex-col gap-4 min-w-0 flex-1">
           <div className="flex items-center gap-2">
             <span className="text-[11px] font-bold uppercase tracking-widest text-[#71523c]">
               Catalog Management
@@ -155,26 +173,28 @@ export default function VendorProductsPage() {
               Aba Node Live
             </span>
           </div>
-          <h1 className="font-serif text-2xl sm:text-3xl lg:text-4xl text-[#221a16] font-bold tracking-tight">
-            Products &amp; Inventory
-          </h1>
-          <p className="text-[14px] text-[#50453e] max-w-2xl">
-            Manage your 28 live storefront styles, inventory stock levels, and pricing synchronised with your Flutterwave terminal.
-          </p>
+          <div className="flex flex-col gap-2">
+            <h1 className="font-serif text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">
+              Products &amp; Inventory
+            </h1>
+            <p className="text-sm text-gray-600 max-w-2xl">
+              Manage your {activeCount} live storefront styles, inventory stock levels, and pricing synchronised with your Flutterwave terminal.
+            </p>
+          </div>
         </div>
 
-        <div className="flex items-center gap-2.5 flex-wrap shrink-0">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full sm:w-auto shrink-0">
           <button
             type="button"
             onClick={() => showToast("Product catalog exported to CSV.")}
-            className="inline-flex items-center gap-2 px-3.5 py-2.5 rounded-lg bg-white border border-[#f0dfd8] text-[#221a16] text-[13px] font-medium shadow-xs hover:bg-[#fceae3] transition-colors"
+            className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-3.5 py-2.5 rounded-lg bg-white border border-[#f0dfd8] text-[#221a16] text-[13px] font-medium shadow-xs hover:bg-[#fceae3] transition-colors"
           >
             <Download className="w-4 h-4 text-[#71523c]" />
             <span>Export CSV</span>
           </button>
           <Link
             href="/dashboard/products/new"
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-[#8c6a53] text-[#fff5f0] text-[12px] font-bold uppercase tracking-wider hover:bg-[#71523c] transition-colors shadow-xs"
+            className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-4 py-2.5 rounded-lg bg-[#8c6a53] text-[#fff5f0] text-[12px] font-bold uppercase tracking-wider hover:bg-[#71523c] transition-colors shadow-xs"
           >
             <Plus className="w-4 h-4" />
             <span>Add Product</span>
@@ -183,76 +203,70 @@ export default function VendorProductsPage() {
       </div>
 
       {/* Quick Stats Bento Strip */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="bg-[#fff1eb] p-4 rounded-xl flex flex-col justify-between border border-[#f0dfd8]/60 shadow-xs">
-          <div className="flex items-center justify-between">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-[#50453e]">
+          <div className="flex justify-between items-center w-full">
+            <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
               Active SKUs
             </span>
-            <Shirt className="w-4 h-4 text-[#71523c]" />
+            <Shirt className="w-4 h-4 text-[#71523c] shrink-0" />
           </div>
-          <div className="mt-3 flex items-baseline gap-2">
-            <span className="font-serif text-2xl font-bold text-[#221a16]">28</span>
-            <span className="text-[12px] text-[#71523c] font-medium">100% In Catalogue</span>
-          </div>
+          <div className="text-3xl font-serif font-bold text-gray-900 mt-2">{activeCount}</div>
+          <div className="text-sm text-gray-500 mt-1">100% In Catalogue</div>
         </div>
 
         <div className="bg-[#fff1eb] p-4 rounded-xl flex flex-col justify-between border border-[#f0dfd8]/60 shadow-xs">
-          <div className="flex items-center justify-between">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-[#50453e]">
+          <div className="flex justify-between items-center w-full">
+            <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
               Total Stock Units
             </span>
-            <Package className="w-4 h-4 text-[#71523c]" />
+            <Package className="w-4 h-4 text-[#71523c] shrink-0" />
           </div>
-          <div className="mt-3 flex items-baseline gap-2">
-            <span className="font-serif text-2xl font-bold text-[#221a16]">342</span>
-            <span className="text-[12px] text-[#50453e]">Across Aba Atelier</span>
-          </div>
+          <div className="text-3xl font-serif font-bold text-gray-900 mt-2">{totalStockUnits}</div>
+          <div className="text-sm text-gray-500 mt-1">Across Aba Atelier</div>
         </div>
 
         <div className="bg-[#fff1eb] p-4 rounded-xl flex flex-col justify-between border border-[#f0dfd8]/60 shadow-xs">
-          <div className="flex items-center justify-between">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-[#ba1a1a]">
+          <div className="flex justify-between items-center w-full">
+            <span className="text-xs font-semibold text-[#ba1a1a] uppercase tracking-wide">
               Low Stock Warning
             </span>
-            <AlertTriangle className="w-4 h-4 text-[#ba1a1a]" />
+            <AlertTriangle className="w-4 h-4 text-[#ba1a1a] shrink-0" />
           </div>
-          <div className="mt-3 flex items-baseline gap-2">
-            <span className="font-serif text-2xl font-bold text-[#ba1a1a]">3 Items</span>
-            <span className="text-[12px] text-[#ba1a1a] font-medium">&lt; 5 units left</span>
-          </div>
+          <div className="text-3xl font-serif font-bold text-[#ba1a1a] mt-2">{lowStockCount} Items</div>
+          <div className="text-sm text-[#ba1a1a] mt-1">&lt; 5 units left</div>
         </div>
 
         <div className="bg-[#fff1eb] p-4 rounded-xl flex flex-col justify-between border border-[#f0dfd8]/60 shadow-xs">
-          <div className="flex items-center justify-between">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-[#71523c]">
+          <div className="flex justify-between items-center w-full">
+            <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
               Catalog Valuation
             </span>
-            <Coins className="w-4 h-4 text-[#71523c]" />
+            <Coins className="w-4 h-4 text-[#71523c] shrink-0" />
           </div>
-          <div className="mt-3 flex items-baseline gap-2">
-            <span className="font-serif text-2xl font-bold text-[#71523c]">₦6,420,000</span>
-            <span className="text-[12px] text-[#50453e]">Gross Value</span>
+          <div className="text-3xl font-serif font-bold text-gray-900 mt-2">
+            ₦{totalValuation.toLocaleString("en-NG")}
           </div>
+          <div className="text-sm text-gray-500 mt-1">Gross Value</div>
         </div>
       </div>
 
       {/* Filter & Search Toolbar */}
       <div className="bg-white p-4 rounded-xl shadow-xs border border-[#f0dfd8]/70 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
         {/* Category Pills */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-1 lg:pb-0 scrollbar-none">
+        <div className="flex flex-wrap items-center gap-2">
           {[
-            { id: "all", label: "All (28)" },
-            { id: "tracksuits", label: "Tracksuits & Co-ords (12)" },
-            { id: "tees", label: "Tees & Tops (8)" },
-            { id: "denim", label: "Denim & Cargo (5)" },
-            { id: "shorts", label: "Shorts & Sets (3)" },
+            { id: "all", label: `All (${activeCount})` },
+            { id: "tracksuits", label: `Tracksuits & Co-ords (${tracksuitsCount})` },
+            { id: "tees", label: `Tees & Tops (${teesCount})` },
+            { id: "denim", label: `Denim & Cargo (${denimCount})` },
+            { id: "shorts", label: `Shorts & Sets (${shortsCount})` },
           ].map((cat) => (
             <button
               key={cat.id}
               type="button"
               onClick={() => setSelectedCategory(cat.id)}
-              className={`px-3.5 py-1.5 rounded-full text-[13px] font-semibold whitespace-nowrap transition-colors shadow-2xs ${
+              className={`grow-0 px-3.5 py-1.5 rounded-full text-[13px] font-semibold whitespace-nowrap transition-colors shadow-2xs ${
                 selectedCategory === cat.id
                   ? "bg-[#8c6a53] text-[#fff5f0]"
                   : "bg-[#fff1eb] text-[#50453e] hover:bg-[#fceae3] hover:text-[#221a16]"
@@ -276,23 +290,25 @@ export default function VendorProductsPage() {
             />
           </div>
 
-          <select
+          <CustomSelect
             value={selectedStatus}
-            onChange={(e) => setSelectedStatus(e.target.value)}
-            className="appearance-none px-3.5 py-2 bg-[#fff1eb] text-[#221a16] text-[13px] font-medium rounded-lg focus:outline-none focus:bg-white border border-[#f0dfd8]/60 cursor-pointer"
-          >
-            <option value="all">All Statuses</option>
-            <option value="in-stock">In Stock</option>
-            <option value="low-stock">Low Stock</option>
-          </select>
+            onChange={setSelectedStatus}
+            options={[
+              { value: "all", label: "All Statuses" },
+              { value: "in-stock", label: "In Stock" },
+              { value: "low-stock", label: "Low Stock" },
+            ]}
+            triggerClassName="bg-[#fff1eb] border-[#f0dfd8]/60"
+            ariaLabel="Filter products by stock status"
+          />
         </div>
       </div>
 
       {/* Products Table */}
       <div className="bg-white rounded-2xl shadow-xs border border-[#f0dfd8]/70 overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse min-w-[760px]">
-            <thead>
+          <table className="w-full text-left border-collapse min-w-0 sm:min-w-[1000px]">
+            <thead className="hidden sm:table-header-group">
               <tr className="bg-[#fff1eb] text-[#50453e] text-[11px] font-bold uppercase tracking-wider">
                 <th className="py-3 px-4">Product Detail</th>
                 <th className="py-3 px-4">Category</th>
@@ -302,13 +318,16 @@ export default function VendorProductsPage() {
                 <th className="py-3 px-4 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#f0dfd8]/40 text-[#221a16] text-[13px]">
+            <tbody className="divide-y-0 sm:divide-y divide-[#f0dfd8]/40 text-[#221a16] text-[13px]">
               {filteredProducts.map((prod) => {
                 const stockPct = Math.round((prod.stock / prod.maxStock) * 100);
                 return (
-                  <tr key={prod.id} className="hover:bg-[#fff1eb]/40 transition-colors">
-                    <td className="py-3.5 px-4">
-                      <div className="flex items-center gap-3.5">
+                  <tr
+                    key={prod.id}
+                    className="flex flex-col gap-3 p-4 border rounded-lg mb-4 bg-white sm:table-row sm:gap-0 sm:p-0 sm:border-0 sm:rounded-none sm:mb-0 sm:bg-transparent hover:bg-[#fff1eb]/40 transition-colors"
+                  >
+                    <td className="sm:table-cell sm:py-3.5 sm:px-4">
+                      <div className="flex items-center gap-3">
                         <div className="w-14 h-14 rounded-lg bg-[#fceae3] overflow-hidden shrink-0 border border-[#f0dfd8] relative">
                           <img
                             src={prod.imageUrl}
@@ -316,39 +335,41 @@ export default function VendorProductsPage() {
                             className="w-full h-full object-cover"
                           />
                         </div>
-                        <div>
-                          <p className="font-bold text-[#221a16] leading-snug">{prod.name}</p>
-                          <p className="text-[12px] text-[#50453e]">{prod.details}</p>
-                          <p className="text-[10px] font-mono uppercase tracking-widest text-[#82746d] mt-0.5">
+                        <div className="flex flex-col gap-1 min-w-[200px]">
+                          <p className="font-semibold text-gray-900 leading-snug">{prod.name}</p>
+                          <p className="text-sm text-gray-500">{prod.details}</p>
+                          <p className="text-[10px] font-mono uppercase tracking-widest text-[#82746d]">
                             SKU: {prod.sku}
                           </p>
                         </div>
                       </div>
                     </td>
 
-                    <td className="py-3.5 px-4">
+                    <td className="sm:table-cell sm:py-3.5 sm:px-4">
                       <span className="inline-flex items-center px-2.5 py-1 bg-[#fff1eb] text-[#50453e] text-[12px] font-medium rounded-md border border-[#f0dfd8]/50">
                         {prod.categoryLabel}
                       </span>
                     </td>
 
-                    <td className="py-3.5 px-4">
-                      <div className="font-serif font-bold text-[15px] text-[#221a16]">
-                        ₦{prod.price.toLocaleString()}
-                      </div>
-                      <div className="text-[10px] text-[#2e7d32] font-semibold flex items-center gap-1">
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#34A853]" />
-                        Flutterwave Active
+                    <td className="sm:table-cell sm:py-3.5 sm:px-4">
+                      <div className="flex flex-col gap-1">
+                        <div className="font-serif font-bold text-[15px] text-[#221a16] whitespace-nowrap">
+                          ₦{prod.price.toLocaleString()}
+                        </div>
+                        <div className="text-[10px] text-[#2e7d32] font-semibold flex items-center gap-1 whitespace-nowrap">
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#34A853] shrink-0" />
+                          Flutterwave Active
+                        </div>
                       </div>
                     </td>
 
-                    <td className="py-3.5 px-4">
-                      <div className="space-y-1">
-                        <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-[#fceae3] text-[#221a16] text-[11px] font-bold">
+                    <td className="sm:table-cell sm:py-3.5 sm:px-4">
+                      <div className="flex flex-col gap-2 w-full max-w-[120px]">
+                        <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-[#fceae3] text-[#221a16] text-[11px] font-bold self-start whitespace-nowrap">
                           <span className={`w-1.5 h-1.5 rounded-full ${prod.stock <= 4 ? "bg-[#ba1a1a]" : "bg-[#34A853]"}`} />
                           {prod.stock} in stock
                         </div>
-                        <div className="w-24 bg-[#fff1eb] rounded-full h-1.5 overflow-hidden">
+                        <div className="w-full bg-[#fff1eb] rounded-full h-1.5 overflow-hidden">
                           <div
                             className={`h-1.5 rounded-full ${prod.stock <= 4 ? "bg-[#ba1a1a]" : "bg-[#71523c]"}`}
                             style={{ width: `${stockPct}%` }}
@@ -357,7 +378,7 @@ export default function VendorProductsPage() {
                       </div>
                     </td>
 
-                    <td className="py-3.5 px-4">
+                    <td className="sm:table-cell sm:py-3.5 sm:px-4">
                       <span
                         className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold uppercase tracking-wider ${
                           prod.status === "Active"
@@ -371,11 +392,11 @@ export default function VendorProductsPage() {
                       </span>
                     </td>
 
-                    <td className="py-3.5 px-4 text-right">
-                      <div className="flex items-center justify-end gap-1">
+                    <td className="flex justify-end gap-4 border-t pt-2 mt-2 sm:table-cell sm:mt-0 sm:pt-0 sm:border-t-0 sm:py-3.5 sm:px-4 sm:text-right">
+                      <div className="flex items-center justify-end gap-4 whitespace-nowrap">
                         <button
                           type="button"
-                          onClick={() => toggleProductStatus(prod.id)}
+                          onClick={() => handleToggleStatus(prod.id, prod.name, prod.status)}
                           className="p-1.5 rounded text-[#50453e] hover:bg-[#fff1eb] hover:text-[#71523c] transition-colors"
                           title="Toggle Visibility"
                         >
@@ -392,6 +413,14 @@ export default function VendorProductsPage() {
                         >
                           <Edit className="w-4 h-4" />
                         </Link>
+                        <button
+                          type="button"
+                          onClick={() => handleDelete(prod.id, prod.name)}
+                          className="p-1.5 rounded text-[#50453e] hover:bg-[#ffdad6] hover:text-[#ba1a1a] transition-colors"
+                          title="Delete Product"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
                       </div>
                     </td>
                   </tr>
