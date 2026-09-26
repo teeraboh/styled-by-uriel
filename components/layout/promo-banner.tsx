@@ -25,7 +25,7 @@ export interface PromoBannerProps {
  * sm:/md: prefixes, with the image and button always visible.
  */
 export function PromoBanner({
-  imageUrl = "https://lh3.googleusercontent.com/aida/AEtjO1VwpoTVa0fyucjCWq-98pOhNIGGjNZQgS_umFMWJILwN_oBOf1OCWDKM3pK1tZ9Mnk-B_yESV_6U7IMdtxABr8JTkfJPaDE6PxOKqTlzWKxT-dWAwG_bDY0FKT-ycGss1xWu0aJzhX5uhKb4d_zyveAyUJ7MFiQkL8Xe2vwfj_vb2ehJ0nhAy6jckQtz-UiAxztGAYJfydNvXTdrzQFWlNq1Q1nDyU59U_zslTzI-XCCmNfg0uaBSfZJkw",
+  imageUrl = "/images/hero/hero-image.png",
   imageAlt = "Dress The Next Generation - Styled by Uriel",
   href = "/shop",
 }: PromoBannerProps) {
