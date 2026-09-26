@@ -78,9 +78,8 @@ const HERO_BADGES = [
   { icon: ShieldCheck, title: "Kids", subtitle: "Comfort First" },
 ] as const;
 
-// Hero model background URL matching Stitch screen b3907a793741427d9cbf36c70e05164f
-const HERO_IMAGE_URL =
-  "https://lh3.googleusercontent.com/aida/AEtjO1VwpoTVa0fyucjCWq-98pOhNIGGjNZQgS_umFMWJILwN_oBOf1OCWDKM3pK1tZ9Mnk-B_yESV_6U7IMdtxABr8JTkfJPaDE6PxOKqTlzWKxT-dWAwG_bDY0FKT-ycGss1xWu0aJzhX5uhKb4d_zyveAyUJ7MFiQkL8Xe2vwfj_vb2ehJ0nhAy6jckQtz-UiAxztGAYJfydNvXTdrzQFWlNq1Q1nDyU59U_zslTzI-XCCmNfg0uaBSfZJkw";
+// Permanent local hero model asset
+const HERO_IMAGE_URL = "/images/hero/hero-image.png";
 
 export default async function HomePage() {
   const products = await getProducts({ limit: 6 });
