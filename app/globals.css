@@ -279,6 +279,22 @@
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+
+  .sign-rope-left,
+  .sign-rope-right {
+    display: none !important;
+  }
+
+  .sign-shadow {
+    animation: none !important;
+    transform: translate3d(0, 26px, 0) scale(0.95) rotate(3deg) !important;
+    opacity: 0.35 !important;
+  }
+
+  .sign-plaque {
+    animation: none !important;
+    transform: translate3d(0, 22px, 0) rotate(3deg) !important;
+  }
 }
 
 /* ── Base Styles ── */
@@ -323,3 +339,193 @@ body {
 @utility font-alex {
   font-family: var(--font-alex);
 }
+
+/* ── About Us Hero Hanging Sign Animations (Refined Looping Cycle) ── */
+@keyframes sign-rope-right-snap {
+  0%, 12% {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+  13.5% {
+    opacity: 0.5;
+    transform: scaleY(0.3) translateY(-4px);
+  }
+  15%, 88% {
+    opacity: 0;
+    transform: scaleY(0);
+  }
+  94%, 98% {
+    opacity: 0.85;
+    transform: scaleY(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+}
+
+@keyframes sign-rope-left-snap {
+  0%, 18% {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+  19.5% {
+    opacity: 0.5;
+    transform: scaleY(0.3) translateY(-4px);
+  }
+  21%, 88% {
+    opacity: 0;
+    transform: scaleY(0);
+  }
+  94%, 98% {
+    opacity: 0.85;
+    transform: scaleY(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+}
+
+@keyframes sign-fall-and-settle {
+  /* Phase 1: Dual rope hanging & gentle boutique sway */
+  0% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+  5% {
+    transform: translate3d(0, 0, 0) rotate(-1.5deg);
+  }
+  9% {
+    transform: translate3d(0, 0, 0) rotate(1.2deg);
+  }
+  12% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+
+  /* Phase 2: Right rope snaps! Swings down from left anchor */
+  14% {
+    transform: translate3d(0, 2px, 0) rotate(14deg);
+  }
+  17% {
+    transform: translate3d(0, 6px, 0) rotate(32deg);
+  }
+
+  /* Phase 3: Left rope snaps! Deep free-fall plunge */
+  19% {
+    transform: translate3d(2px, 18px, 0) rotate(26deg);
+  }
+  21% {
+    transform: translate3d(3px, 42px, 0) rotate(16deg);
+  }
+  23.5% {
+    transform: translate3d(2px, 68px, 0) rotate(6deg);
+  }
+
+  /* Phase 4: Safety catch & spring rebound */
+  26% {
+    transform: translate3d(0, 50px, 0) rotate(-7deg);
+  }
+  30% {
+    transform: translate3d(0, 16px, 0) rotate(6deg);
+  }
+  34% {
+    transform: translate3d(0, 25px, 0) rotate(1deg);
+  }
+  38% {
+    transform: translate3d(0, 22px, 0) rotate(3deg);
+  }
+
+  /* Phase 5: Settled resting pause (~2.8s stationary display) */
+  38%, 88% {
+    transform: translate3d(0, 22px, 0) rotate(3deg);
+  }
+
+  /* Phase 6: Seamless re-hoisting reset for next cycle */
+  94% {
+    transform: translate3d(0, 8px, 0) rotate(1.2deg);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+}
+
+@keyframes sign-shadow-pulse {
+  /* Subtle ambient shadow while hanging */
+  0%, 12% {
+    transform: translate3d(0, 6px, 0) scale(0.85);
+    opacity: 0.22;
+  }
+  /* Shadow follows swing */
+  14% {
+    transform: translate3d(4px, 8px, 0) scale(0.88) rotate(4deg);
+    opacity: 0.28;
+  }
+  17% {
+    transform: translate3d(6px, 12px, 0) scale(0.92) rotate(10deg);
+    opacity: 0.35;
+  }
+  /* Deepest plunge: shadow gets closest, largest, and strongest */
+  19% {
+    transform: translate3d(4px, 24px, 0) scale(1.0);
+    opacity: 0.48;
+  }
+  21% {
+    transform: translate3d(3px, 46px, 0) scale(1.08);
+    opacity: 0.58;
+  }
+  23.5% {
+    transform: translate3d(2px, 72px, 0) scale(1.15);
+    opacity: 0.65;
+  }
+  /* Shadow softens on catch and rebound */
+  26% {
+    transform: translate3d(0, 54px, 0) scale(1.05);
+    opacity: 0.52;
+  }
+  30% {
+    transform: translate3d(0, 20px, 0) scale(0.88);
+    opacity: 0.28;
+  }
+  34% {
+    transform: translate3d(0, 28px, 0) scale(0.96);
+    opacity: 0.38;
+  }
+  /* Settled resting shadow */
+  38%, 88% {
+    transform: translate3d(0, 26px, 0) scale(0.95) rotate(3deg);
+    opacity: 0.35;
+  }
+  /* Seamless reset */
+  94% {
+    transform: translate3d(0, 14px, 0) scale(0.9);
+    opacity: 0.26;
+  }
+  100% {
+    transform: translate3d(0, 6px, 0) scale(0.85);
+    opacity: 0.22;
+  }
+}
+
+.sign-rope-left {
+  animation: sign-rope-left-snap 6s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+  will-change: transform, opacity;
+}
+
+.sign-rope-right {
+  animation: sign-rope-right-snap 6s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+  will-change: transform, opacity;
+}
+
+.sign-shadow {
+  background: radial-gradient(ellipse at center, rgba(113, 82, 60, 0.45) 0%, rgba(113, 82, 60, 0) 72%);
+  filter: blur(4px);
+  animation: sign-shadow-pulse 6s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+  will-change: transform, opacity;
+}
+
+.sign-plaque {
+  transform-origin: 16px 4px;
+  animation: sign-fall-and-settle 6s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+  will-change: transform;
+}
+

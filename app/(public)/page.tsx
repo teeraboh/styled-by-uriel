@@ -6,6 +6,7 @@ import { TrustStrip } from "@/components/layout/trust-strip";
 import { PromoBanner } from "@/components/layout/promo-banner";
 import { ProductCarousel } from "@/components/product/product-carousel";
 import { FeaturedProductCard } from "@/components/product/featured-product-card";
+import { RevealText } from "@/components/ui/reveal-text";
 import { getProducts } from "@/lib/products";
 
 export const dynamic = "force-dynamic";
@@ -208,26 +209,32 @@ export default async function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Section Header with individual 45-degree angled editorial highlight strips */}
           <div className="flex flex-col items-center justify-center text-center max-w-3xl mx-auto mb-10 sm:mb-14">
-            <span
-              style={{ clipPath: "polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%)" }}
-              className="inline-block bg-brand-beige text-brand-dark-brown text-[11px] sm:text-xs font-bold uppercase tracking-[0.2em] px-5 sm:px-6 py-1"
-            >
-              OUR COLLECTION
-            </span>
+            <RevealText delay={0}>
+              <span
+                style={{ clipPath: "polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%)" }}
+                className="inline-block bg-brand-beige text-brand-dark-brown text-[11px] sm:text-xs font-bold uppercase tracking-[0.2em] px-5 sm:px-6 py-1"
+              >
+                OUR COLLECTION
+              </span>
+            </RevealText>
 
-            <h2
-              style={{ clipPath: "polygon(20px 0, 100% 0, calc(100% - 20px) 100%, 0 100%)" }}
-              className="inline-block bg-brand-beige text-brand-dark-brown font-display text-3xl sm:text-4xl lg:text-[46px] font-bold tracking-tight leading-none px-8 sm:px-12 py-2.5 sm:py-3.5 -mt-0.5"
-            >
-              Featured Products
-            </h2>
+            <RevealText delay={100}>
+              <h2
+                style={{ clipPath: "polygon(20px 0, 100% 0, calc(100% - 20px) 100%, 0 100%)" }}
+                className="inline-block bg-brand-beige text-brand-dark-brown font-display text-3xl sm:text-4xl lg:text-[46px] font-bold tracking-tight leading-none px-8 sm:px-12 py-2.5 sm:py-3.5 -mt-0.5"
+              >
+                Featured Products
+              </h2>
+            </RevealText>
 
-            <p
-              style={{ clipPath: "polygon(14px 0, 100% 0, calc(100% - 14px) 100%, 0 100%)" }}
-              className="inline-block bg-brand-beige text-brand-dark-brown text-xs sm:text-sm md:text-base font-medium px-6 sm:px-8 py-1 -mt-0.5"
-            >
-              Explore our most popular items loved by customers across Nigeria
-            </p>
+            <RevealText delay={200}>
+              <p
+                style={{ clipPath: "polygon(14px 0, 100% 0, calc(100% - 14px) 100%, 0 100%)" }}
+                className="inline-block bg-brand-beige text-brand-dark-brown text-xs sm:text-sm md:text-base font-medium px-6 sm:px-8 py-1 -mt-0.5"
+              >
+                Explore our most popular items loved by customers across Nigeria
+              </p>
+            </RevealText>
           </div>
 
           {/* Product Carousel with live Supabase products or curated featured fallbacks */}

@@ -16,18 +16,14 @@ import {
   Navigation,
 } from "lucide-react";
 import { StoreLocationMapLoader } from "@/components/location/store-location-map-loader";
+import { RevealText } from "@/components/ui/reveal-text";
 
 // ── Stitch-generated placeholder imagery (temporary dev placeholders). ──
-const HERO_IMAGE =
-  "https://lh3.googleusercontent.com/aida-public/AB6AXuDtrq_IIFMVhOQJQJe0Ntrc7xQt9VedJqq319W6M1q8_lRniT8iJjV8fTmxcNaqI0iiaW2GkuSR77k2DXvLESLCsoGotya6KHnXzXAdLMYpiv-IFCo45t9TvcOblr-61pKoSPOlYScUBQu3deP1mbSq4w8ltz0jTyh14wMoR_kVh0vjEX-J0NJZqvzCVrzjLPOhb0Gq7bRlL-rOsk2dFw2IQtd5LQXFCbWbpVpcTufEGSr7wt0IbwhL";
-const ATELIER_IMAGE =
-  "https://lh3.googleusercontent.com/aida-public/AB6AXuB-6zhL61Fow1fwb1b5R0PF7lL3M5wQCaoABZLd45LFLWXkrz67wPwG_H1sW8AY8jDEWBexZ2nhRODd0WrWwMoLlKKrTpYYqzY8DtUcxk1lNXe4kcNALmm8dQIlq5yZjTzit77Lq7aniDsycjaFtsRTS4dUUripMWqlFThQHrMkJ9QsamIDqQZc8VepOPR39KQrjS4Neuy-iSsPVzkOKilXeiKHhQGHcgnYdcDhZmaDucyqFo_IYWUC";
-const FABRIC_IMAGE =
-  "https://lh3.googleusercontent.com/aida-public/AB6AXuA7r-DlXkNcqeOIMlWlVxMNx7-8D_Uw0kVu7FtHhS7VbLN20AQw6iqBvpN3wCn1QqQqOE3vqTna1Fgz5Q_QYdOiUZO4trCsS5_p8NkBPsaTIUE25BTmHq53MaSkOCFVC49RNFxfeqbdlsHXAoqnbndwn1bOJjauu4qsVa6JHLYueIObYeAyRhdNfH5-kGka9FGcTNLV_TyXCp3rYbwYb-u1yoxQA9xsbwADWvC5BaUUP95OQf4_Qekj";
-const STITCH_IMAGE =
-  "https://lh3.googleusercontent.com/aida-public/AB6AXuCce6QUBMUamkurygLYHGJdmUEoaLn_5sC1u_Bl3LwI7fyxyyPmVYCVw6AnPvPZe2yxJVTzjlOiFGzwQfIPdOpKiUEoSvtSyzZzMPXFTAM6aG1ZSiddrnARHJClxgFO95bj7vP8Op3u0AgY1lfQfSA_9qMEfBWOoCu4wsCdC1Q2Bl-3LdNztVi7-7dngP1att0LPTceet3U7Mrbpd8t6ESEZlCPi8MYIFPfFCRqxQdUdgRJlCGtzPqJ";
-const PACKAGE_IMAGE =
-  "https://lh3.googleusercontent.com/aida-public/AB6AXuBuB5KPWEFscB-HOnEfMdD6iFjRvdtlEBcdR4GTvZEh7Vt0gRzfAuqAT7o3IkyY8nC2kdNHSWVr5Qve9W_38F7fYTBcZJdH9qS6-qet3yK_cfWzqGP3lSO88iWh_TwIN9C5yndvwhjiUdJeA5d_LRajAcwKiy3xXxqBi2HlS1nFRqVCpzxxnAdUanR4bHV6i__WkbJyCLLlCIp9nR4VbWnpoiUi2rl2OsziCjw7SJiFuA7asBTpar9O";
+const HERO_IMAGE = "/images/about/about-hero.png";
+const ATELIER_IMAGE = "/images/about/founders-note.png";
+const FABRIC_IMAGE = "/images/about/step-1.png";
+const STITCH_IMAGE = "/images/about/step-2.png";
+const PACKAGE_IMAGE = "/images/about/step-3.png";
 const PILLARS = [
   {
     icon: Shirt,
@@ -86,27 +82,33 @@ export default function AboutPage() {
       <section className="relative w-full bg-surface-container-low px-4 sm:px-6 lg:px-8 py-10 sm:py-14 lg:py-16 overflow-hidden">
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 items-center relative z-10">
           <div className="lg:col-span-7 flex flex-col items-start gap-3.5 sm:gap-4">
-            <div className="flex items-center gap-2">
-              <span className="w-8 h-px bg-primary" />
-              <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-primary">
-                Our Heritage &amp; Purpose
-              </span>
-            </div>
-            <h1 className="font-display text-3xl sm:text-4xl lg:text-[44px] text-on-surface font-semibold leading-tight">
-              Little Styles,{" "}
-              <span className="italic font-normal text-primary">
-                Big Stories
-              </span>{" "}
-              — Handcrafted in Aba.
-            </h1>
-            <p className="text-sm sm:text-base leading-relaxed text-on-surface-variant max-w-xl">
-              Founded by{" "}
-              <strong className="font-semibold text-on-surface">
-                Natasha Ezinne Amuruonyenaego
-              </strong>
-              , Styled by Uriel is redefining modern African children&apos;s fashion through
-              playful luxury, supreme comfort, and durable craftsmanship.
-            </p>
+            <RevealText delay={0}>
+              <div className="flex items-center gap-2">
+                <span className="w-8 h-px bg-primary" />
+                <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-primary">
+                  Our Heritage &amp; Purpose
+                </span>
+              </div>
+            </RevealText>
+            <RevealText delay={100}>
+              <h1 className="font-display text-3xl sm:text-4xl lg:text-[44px] text-on-surface font-semibold leading-tight">
+                Little Styles,{" "}
+                <span className="italic font-normal text-primary">
+                  Big Stories
+                </span>{" "}
+                — Handcrafted in Aba.
+              </h1>
+            </RevealText>
+            <RevealText delay={200}>
+              <p className="text-sm sm:text-base leading-relaxed text-on-surface-variant max-w-xl">
+                Founded by{" "}
+                <strong className="font-semibold text-on-surface">
+                  Natasha Ezinne Amuruonyenaego
+                </strong>
+                , Styled by Uriel is redefining modern African children&apos;s fashion through
+                playful luxury, supreme comfort, and durable craftsmanship.
+              </p>
+            </RevealText>
             <div className="flex flex-wrap items-center gap-4 pt-1 sm:pt-2">
               <Link
                 href="/shop"
@@ -129,31 +131,73 @@ export default function AboutPage() {
 
           {/* Mosaic collage visual */}
           <div className="lg:col-span-5 relative flex items-center justify-center">
-            <div className="relative w-full max-w-md aspect-[4/5] rounded-xl overflow-hidden shadow-xl bg-surface-container">
-              <Image
-                src={HERO_IMAGE}
-                alt="Cheerful African boy in a tailored beige streetwear jacket at a warm cream studio, temporary dev placeholder"
-                fill
-                className="object-cover"
-                sizes="(max-width: 1024px) 100vw, 40vw"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-on-surface/60 via-transparent to-transparent" />
-              <div className="absolute bottom-4 left-4 right-4 bg-surface/90 backdrop-blur-md p-4 rounded-lg shadow-md flex items-center justify-between">
-                <div>
-                  <p className="text-[10px] font-bold uppercase tracking-widest text-primary">
-                    Aba Atelier Hub
-                  </p>
-                  <p className="text-lg font-bold text-on-surface">Enyimba Garment Heart</p>
+            <div className="relative w-full max-w-md">
+              <div className="relative w-full aspect-[4/5] rounded-xl overflow-hidden shadow-[0_20px_40px_-12px_rgba(113,82,60,0.14),0_6px_18px_-4px_rgba(113,82,60,0.08)] bg-surface-container">
+                <Image
+                  src={HERO_IMAGE}
+                  alt="Cheerful African child wearing handcrafted bespoke streetwear jacket from Styled by Uriel Aba atelier"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 1024px) 100vw, 40vw"
+                  priority
+                />
+                {/* Soft perimeter edge blending overlay */}
+                <div className="absolute inset-0 pointer-events-none rounded-xl shadow-[inset_0_0_18px_2px_rgba(255,241,235,0.45)] ring-1 ring-inset ring-primary/10 z-[1]" />
+                <div className="absolute inset-0 bg-gradient-to-t from-on-surface/60 via-transparent to-transparent z-[2]" />
+                <div className="absolute bottom-4 left-4 right-4 bg-surface/90 backdrop-blur-md p-4 rounded-lg shadow-md flex items-center justify-between z-[3]">
+                  <div>
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-primary">
+                      Aba Atelier Hub
+                    </p>
+                    <p className="text-lg font-bold text-on-surface">Enyimba Garment Heart</p>
+                  </div>
+                  <BadgeCheck className="w-7 h-7 text-secondary" strokeWidth={1.5} />
                 </div>
-                <BadgeCheck className="w-7 h-7 text-secondary" strokeWidth={1.5} />
               </div>
-            </div>
-            {/* Floating accent stamp */}
-            <div className="absolute -top-4 -right-4 bg-secondary-container text-secondary p-4 rounded-xl shadow-lg hidden sm:flex flex-col items-center justify-center text-center rotate-3 w-28">
-              <span className="font-display text-lg font-bold leading-none">100%</span>
-              <span className="text-[9px] font-bold uppercase tracking-wider mt-1">
-                Made in Nigeria
-              </span>
+
+              {/* Hanging accent sign (100% Made in Nigeria) */}
+              <div
+                className="absolute -top-6 -right-2 sm:-right-4 z-20 hidden sm:flex flex-col items-center pointer-events-none select-none"
+                aria-label="100% Made in Nigeria badge"
+              >
+                {/* Suspension ropes */}
+                <div className="relative w-28 h-6 overflow-visible">
+                  {/* Left rope */}
+                  <span
+                    className="absolute left-[15.5px] top-0 w-[3px] h-6 bg-primary/75 origin-top rounded-full sign-rope-left"
+                    aria-hidden="true"
+                  />
+                  {/* Right rope */}
+                  <span
+                    className="absolute right-[15.5px] top-0 w-[3px] h-6 bg-primary/75 origin-top rounded-full sign-rope-right"
+                    aria-hidden="true"
+                  />
+                </div>
+
+                {/* Soft projected ambient shadow under sign */}
+                <div
+                  className="sign-shadow absolute top-6 w-24 h-5 rounded-full pointer-events-none"
+                  aria-hidden="true"
+                />
+
+                {/* Sign plaque */}
+                <div className="sign-plaque relative bg-secondary-container text-secondary px-3.5 py-3 rounded-xl shadow-md border border-secondary/30 flex flex-col items-center justify-center text-center w-28">
+                  {/* Subtle brass eyelets */}
+                  <span
+                    className="absolute top-1.5 left-[14px] w-1.5 h-1.5 rounded-full border border-secondary/60 bg-surface/90"
+                    aria-hidden="true"
+                  />
+                  <span
+                    className="absolute top-1.5 right-[14px] w-1.5 h-1.5 rounded-full border border-secondary/60 bg-surface/90"
+                    aria-hidden="true"
+                  />
+
+                  <span className="font-display text-lg font-bold leading-none">100%</span>
+                  <span className="text-[9px] font-bold uppercase tracking-wider mt-1 text-secondary">
+                    Made in Nigeria
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -169,7 +213,7 @@ export default function AboutPage() {
               <div className="w-full aspect-[4/5] rounded-xl overflow-hidden shadow-md bg-surface-container-high">
                 <Image
                   src={ATELIER_IMAGE}
-                  alt="Fashion atelier worktable with warm camel cotton fabrics and tailoring tools, temporary dev placeholder"
+                  alt="Styled by Uriel atelier tailoring worktable with warm camel cotton fabrics and artisanal crafting tools"
                   fill
                   className="object-cover"
                   sizes="(max-width: 1024px) 100vw, 40vw"
@@ -206,38 +250,44 @@ export default function AboutPage() {
 
           {/* Founder note content */}
           <div className="lg:col-span-7 order-1 lg:order-2 flex flex-col gap-5">
-            <div className="flex items-center gap-2 text-primary">
-              <span className="w-8 h-[2px] bg-primary" />
-              <span className="text-[11px] font-bold uppercase tracking-[0.2em]">
-                The Founder&apos;s Note
-              </span>
-            </div>
-            <h2 className="font-display text-3xl sm:text-4xl text-on-surface leading-tight">
-              Rooted in Aba Craft, Designed for Modern Little Stars
-            </h2>
-            <div className="space-y-4 text-sm sm:text-base text-on-surface-variant leading-relaxed">
-              <p>
-                <strong className="text-on-surface font-semibold">Styled by Uriel</strong>{" "}
-                started with a simple observation: children deserve clothes that feel as
-                wonderfully comfortable as sleepwear while looking as elevated and trendy as
-                high-end streetwear.
-              </p>
-              <p>
-                From our creative hub at{" "}
-                <strong className="text-on-surface font-semibold">
-                  Enyimba Market, Aba, Abia State
-                </strong>{" "}
-                — renowned across West Africa for garment craft and vibrant commercial energy —
-                we personally source premium breathable fabrics, oversee every stitch and seam,
-                and design timeless pieces that withstand rough playground adventures and wash
-                after wash.
-              </p>
-              <p>
-                Every tracksuit, graphic polo, and tailored cargo jean is infused with care. We
-                make dressing up effortless for Nigerian parents who want their young boys and
-                girls to exude charm, gentleness, and effortless swagger.
-              </p>
-            </div>
+            <RevealText delay={0}>
+              <div className="flex items-center gap-2 text-primary">
+                <span className="w-8 h-[2px] bg-primary" />
+                <span className="text-[11px] font-bold uppercase tracking-[0.2em]">
+                  The Founder&apos;s Note
+                </span>
+              </div>
+            </RevealText>
+            <RevealText delay={100}>
+              <h2 className="font-display text-3xl sm:text-4xl text-on-surface leading-tight">
+                Rooted in Aba Craft, Designed for Modern Little Stars
+              </h2>
+            </RevealText>
+            <RevealText delay={200}>
+              <div className="space-y-4 text-sm sm:text-base text-on-surface-variant leading-relaxed">
+                <p>
+                  <strong className="text-on-surface font-semibold">Styled by Uriel</strong>{" "}
+                  started with a simple observation: children deserve clothes that feel as
+                  wonderfully comfortable as sleepwear while looking as elevated and trendy as
+                  high-end streetwear.
+                </p>
+                <p>
+                  From our creative hub at{" "}
+                  <strong className="text-on-surface font-semibold">
+                    Enyimba Market, Aba, Abia State
+                  </strong>{" "}
+                  — renowned across West Africa for garment craft and vibrant commercial energy —
+                  we personally source premium breathable fabrics, oversee every stitch and seam,
+                  and design timeless pieces that withstand rough playground adventures and wash
+                  after wash.
+                </p>
+                <p>
+                  Every tracksuit, graphic polo, and tailored cargo jean is infused with care. We
+                  make dressing up effortless for Nigerian parents who want their young boys and
+                  girls to exude charm, gentleness, and effortless swagger.
+                </p>
+              </div>
+            </RevealText>
             {/* Founder signature */}
             <div className="pt-4 flex items-center justify-between flex-wrap gap-4">
               <div className="flex items-center gap-4">
@@ -272,16 +322,22 @@ export default function AboutPage() {
       <section className="w-full px-4 sm:px-6 lg:px-8 py-16 sm:py-24 bg-surface-container-low">
         <div className="max-w-7xl mx-auto flex flex-col gap-10">
           <div className="text-center max-w-2xl mx-auto flex flex-col items-center gap-2">
-            <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-primary">
-              Our Non-Negotiables
-            </span>
-            <h2 className="font-display text-3xl sm:text-4xl text-on-surface">
-              The Four Pillars of Styled by Uriel
-            </h2>
-            <p className="text-sm sm:text-base text-on-surface-variant leading-relaxed">
-              Built on genuine tenderness for your children, authentic Nigerian craftsmanship,
-              and world-class garment design.
-            </p>
+            <RevealText delay={0}>
+              <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-primary">
+                Our Non-Negotiables
+              </span>
+            </RevealText>
+            <RevealText delay={100}>
+              <h2 className="font-display text-3xl sm:text-4xl text-on-surface">
+                The Four Pillars of Styled by Uriel
+              </h2>
+            </RevealText>
+            <RevealText delay={200}>
+              <p className="text-sm sm:text-base text-on-surface-variant leading-relaxed">
+                Built on genuine tenderness for your children, authentic Nigerian craftsmanship,
+                and world-class garment design.
+              </p>
+            </RevealText>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
             {PILLARS.map((pillar) => (
@@ -313,17 +369,23 @@ export default function AboutPage() {
         <div className="max-w-7xl mx-auto flex flex-col gap-10">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
             <div>
-              <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-primary">
-                Craftsmanship Unveiled
-              </span>
-              <h2 className="font-display text-3xl sm:text-4xl text-on-surface mt-1">
-                Behind The Seams: Our Process
-              </h2>
+              <RevealText delay={0}>
+                <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-primary">
+                  Craftsmanship Unveiled
+                </span>
+              </RevealText>
+              <RevealText delay={100}>
+                <h2 className="font-display text-3xl sm:text-4xl text-on-surface mt-1">
+                  Behind The Seams: Our Process
+                </h2>
+              </RevealText>
             </div>
-            <p className="text-sm sm:text-base text-on-surface-variant max-w-md leading-relaxed">
-              How raw textiles in Aba transform into comfortable, statement looks for your
-              little ones.
-            </p>
+            <RevealText delay={200}>
+              <p className="text-sm sm:text-base text-on-surface-variant max-w-md leading-relaxed">
+                How raw textiles in Aba transform into comfortable, statement looks for your
+                little ones.
+              </p>
+            </RevealText>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
             {PROCESS_STEPS.map((step) => (
@@ -334,7 +396,7 @@ export default function AboutPage() {
                 <div className="aspect-[4/3] w-full bg-surface-container-high overflow-hidden relative">
                   <Image
                     src={step.image}
-                    alt={`${step.alt}, temporary dev placeholder`}
+                    alt={step.alt}
                     fill
                     className="object-cover"
                     sizes="(max-width: 768px) 100vw, 33vw"
@@ -484,16 +546,22 @@ export default function AboutPage() {
       <section className="w-full px-4 sm:px-6 lg:px-8 py-16 sm:py-24 bg-surface">
         <div className="max-w-7xl mx-auto rounded-xl bg-surface-container-high p-8 md:p-10 flex flex-col md:flex-row items-center justify-between gap-6 relative overflow-hidden">
           <div className="flex flex-col gap-2 z-10 max-w-xl text-center md:text-left">
-            <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-primary">
-              Elevate Their Wardrobe
-            </span>
-            <h2 className="font-display text-3xl text-on-surface">
-              Ready to Dress Your Little Treasure?
-            </h2>
-            <p className="text-sm sm:text-base text-on-surface-variant leading-relaxed">
-              Discover our latest tracksuits, varsity-inspired polos, and durable denim
-              trousers crafted right here in Aba.
-            </p>
+            <RevealText delay={0}>
+              <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-primary">
+                Elevate Their Wardrobe
+              </span>
+            </RevealText>
+            <RevealText delay={100}>
+              <h2 className="font-display text-3xl text-on-surface">
+                Ready to Dress Your Little Treasure?
+              </h2>
+            </RevealText>
+            <RevealText delay={200}>
+              <p className="text-sm sm:text-base text-on-surface-variant leading-relaxed">
+                Discover our latest tracksuits, varsity-inspired polos, and durable denim
+                trousers crafted right here in Aba.
+              </p>
+            </RevealText>
           </div>
           <div className="flex flex-wrap items-center justify-center gap-4 z-10">
             <Link
