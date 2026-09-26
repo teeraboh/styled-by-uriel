@@ -446,8 +446,11 @@ export function ShopClient({ initialProducts, categories }: ShopClientProps) {
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {filtered.map((product) => {
+                const rawImageUrl = product.images?.[0]?.image_url;
                 const imageUrl =
-                  product.images?.[0]?.image_url || FALLBACK_IMAGE;
+                  !rawImageUrl || rawImageUrl.includes("/aida/AEtjO1")
+                    ? FALLBACK_IMAGE
+                    : rawImageUrl;
                 const badge =
                   product.stock_quantity <= 4 && product.stock_quantity > 0
                     ? "Low Stock"
