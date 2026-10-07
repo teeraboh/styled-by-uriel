@@ -237,13 +237,13 @@ export function CheckoutForm() {
             ].map((option) => (
               <label
                 key={option.value}
-                className="flex items-center justify-between p-4 rounded-lg cursor-pointer bg-surface-container-low hover:bg-surface-container transition-colors"
+                className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-4 p-3.5 sm:p-4 rounded-lg cursor-pointer bg-surface-container-low hover:bg-surface-container transition-colors"
               >
-                <div className="flex items-center gap-3">
+                <div className="flex items-start sm:items-center gap-3">
                   <input
                     type="radio"
                     value={option.value}
-                    className="accent-primary w-4 h-4"
+                    className="mt-0.5 sm:mt-0 accent-primary w-4 h-4 shrink-0"
                     {...register("shippingMethod")}
                   />
                   <div>
@@ -255,7 +255,7 @@ export function CheckoutForm() {
                     </span>
                   </div>
                 </div>
-                <span className="text-xs font-semibold uppercase tracking-wider text-on-surface-variant">
+                <span className="text-xs font-semibold uppercase tracking-wider text-on-surface-variant pl-7 sm:pl-0">
                   Cost at checkout
                 </span>
               </label>

@@ -229,11 +229,11 @@ export default function CollectionsPage() {
 
               <div className="p-6 flex flex-col flex-grow justify-between gap-4 bg-surface-container-low">
                 <div>
-                  <div className="flex items-baseline justify-between mb-2">
+                  <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1 sm:gap-4 mb-2">
                     <h3 className="text-lg font-bold text-on-surface group-hover:text-primary transition-colors">
                       {collection.title}
                     </h3>
-                    <span className="text-[22px] font-extrabold text-primary">
+                    <span className="text-xl sm:text-[22px] font-extrabold text-primary shrink-0">
                       From ₦{collection.fromPrice.toLocaleString("en-NG")}
                     </span>
                   </div>

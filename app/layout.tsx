@@ -30,14 +30,14 @@ export const metadata: Metadata = {
     template: "%s | Styled by Uriel",
   },
   description:
-    "Cute. Comfy. Stylish. — Premium children's fashion from Aba, Nigeria. Shop trendy, comfortable, and affordable kids wear with nationwide delivery.",
+    "Styled by Uriel is a premium children’s fashion brand dedicated to creating stylish, comfortable, and quality outfits for kids. Shop trendy, comfortable, and durable wear with nationwide delivery across Nigeria.",
   keywords: [
     "kids fashion",
     "children clothing",
     "Nigerian kids wear",
     "premium children fashion",
     "Styled by Uriel",
-    "Aba fashion",
+    "kids fashion Nigeria",
   ],
   openGraph: {
     type: "website",

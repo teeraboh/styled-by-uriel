@@ -33,9 +33,9 @@ const PILLARS = [
   },
   {
     icon: Cog,
-    title: "Aba Craftsmanship",
-    desc: "Harnessing the legendary garment artistry of Abia State to create contemporary, durable fashion pieces engineered to survive countless washes.",
-    tag: "Enyimba Heritage",
+    title: "Quality & Durability",
+    desc: "Crafted with soft, durable fabrics and reinforced finishes designed to withstand active play and survive countless washes.",
+    tag: "Premium Quality",
   },
   {
     icon: Tag,
@@ -70,7 +70,7 @@ const PROCESS_STEPS = [
     image: PACKAGE_IMAGE,
     step: "Step 03",
     title: "Quality Control & Dispatch",
-    desc: "Every order is hand-inspected for loose threads and seam strength before being wrapped and dispatched from Enyimba Market directly to your doorstep.",
+    desc: "Every order is carefully inspected for quality and durability before being wrapped and dispatched directly to your doorstep.",
     alt: "Neatly folded children's clothing parcels in branded packaging",
   },
 ];
@@ -86,7 +86,7 @@ export default function AboutPage() {
               <div className="flex items-center gap-2">
                 <span className="w-8 h-px bg-primary" />
                 <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-primary">
-                  Our Heritage &amp; Purpose
+                  Our Brand &amp; Purpose
                 </span>
               </div>
             </RevealText>
@@ -94,9 +94,9 @@ export default function AboutPage() {
               <h1 className="font-display text-3xl sm:text-4xl lg:text-[44px] text-on-surface font-semibold leading-tight">
                 Little Styles,{" "}
                 <span className="italic font-normal text-primary">
-                  Big Stories
-                </span>{" "}
-                — Handcrafted in Aba.
+                  Big Confidence
+                </span>
+                .
               </h1>
             </RevealText>
             <RevealText delay={200}>
@@ -105,8 +105,8 @@ export default function AboutPage() {
                 <strong className="font-semibold text-on-surface">
                   Natasha Ezinne Amuruonyenaego
                 </strong>
-                , Styled by Uriel is redefining modern African children&apos;s fashion through
-                playful luxury, supreme comfort, and durable craftsmanship.
+                , Styled by Uriel is a premium children&apos;s fashion brand dedicated to creating
+                stylish, comfortable, and quality outfits that combine modern fashion with durability.
               </p>
             </RevealText>
             <div className="flex flex-wrap items-center gap-4 pt-1 sm:pt-2">
@@ -135,7 +135,7 @@ export default function AboutPage() {
               <div className="relative w-full aspect-[4/5] rounded-xl overflow-hidden shadow-[0_20px_40px_-12px_rgba(113,82,60,0.14),0_6px_18px_-4px_rgba(113,82,60,0.08)] bg-surface-container">
                 <Image
                   src={HERO_IMAGE}
-                  alt="Cheerful African child wearing handcrafted bespoke streetwear jacket from Styled by Uriel Aba atelier"
+                  alt="Cheerful African child wearing stylish comfortable kids fashion from Styled by Uriel"
                   fill
                   className="object-cover"
                   sizes="(max-width: 1024px) 100vw, 40vw"
@@ -147,55 +147,11 @@ export default function AboutPage() {
                 <div className="absolute bottom-4 left-4 right-4 bg-surface/90 backdrop-blur-md p-4 rounded-lg shadow-md flex items-center justify-between z-[3]">
                   <div>
                     <p className="text-[10px] font-bold uppercase tracking-widest text-primary">
-                      Aba Atelier Hub
+                      Styled by Uriel
                     </p>
-                    <p className="text-lg font-bold text-on-surface">Enyimba Garment Heart</p>
+                    <p className="text-lg font-bold text-on-surface">Little Styles, Big Confidence</p>
                   </div>
                   <BadgeCheck className="w-7 h-7 text-secondary" strokeWidth={1.5} />
-                </div>
-              </div>
-
-              {/* Hanging accent sign (100% Made in Nigeria) */}
-              <div
-                className="absolute -top-6 -right-2 sm:-right-4 z-20 hidden sm:flex flex-col items-center pointer-events-none select-none"
-                aria-label="100% Made in Nigeria badge"
-              >
-                {/* Suspension ropes */}
-                <div className="relative w-28 h-6 overflow-visible">
-                  {/* Left rope */}
-                  <span
-                    className="absolute left-[15.5px] top-0 w-[3px] h-6 bg-primary/75 origin-top rounded-full sign-rope-left"
-                    aria-hidden="true"
-                  />
-                  {/* Right rope */}
-                  <span
-                    className="absolute right-[15.5px] top-0 w-[3px] h-6 bg-primary/75 origin-top rounded-full sign-rope-right"
-                    aria-hidden="true"
-                  />
-                </div>
-
-                {/* Soft projected ambient shadow under sign */}
-                <div
-                  className="sign-shadow absolute top-6 w-24 h-5 rounded-full pointer-events-none"
-                  aria-hidden="true"
-                />
-
-                {/* Sign plaque */}
-                <div className="sign-plaque relative bg-secondary-container text-secondary px-3.5 py-3 rounded-xl shadow-md border border-secondary/30 flex flex-col items-center justify-center text-center w-28">
-                  {/* Subtle brass eyelets */}
-                  <span
-                    className="absolute top-1.5 left-[14px] w-1.5 h-1.5 rounded-full border border-secondary/60 bg-surface/90"
-                    aria-hidden="true"
-                  />
-                  <span
-                    className="absolute top-1.5 right-[14px] w-1.5 h-1.5 rounded-full border border-secondary/60 bg-surface/90"
-                    aria-hidden="true"
-                  />
-
-                  <span className="font-display text-lg font-bold leading-none">100%</span>
-                  <span className="text-[9px] font-bold uppercase tracking-wider mt-1 text-secondary">
-                    Made in Nigeria
-                  </span>
                 </div>
               </div>
             </div>
@@ -213,13 +169,13 @@ export default function AboutPage() {
               <div className="w-full aspect-[4/5] rounded-xl overflow-hidden shadow-md bg-surface-container-high">
                 <Image
                   src={ATELIER_IMAGE}
-                  alt="Styled by Uriel atelier tailoring worktable with warm camel cotton fabrics and artisanal crafting tools"
+                  alt="Styled by Uriel design workspace with warm camel fabrics and children's fashion moodboard"
                   fill
                   className="object-cover"
                   sizes="(max-width: 1024px) 100vw, 40vw"
                 />
               </div>
-              <div className="absolute -bottom-6 left-4 sm:left-4 bg-surface-container-lowest p-4 rounded-xl shadow-lg max-w-xs">
+              <div className="absolute -bottom-6 left-4 right-4 sm:right-auto sm:max-w-xs bg-surface-container-lowest p-4 rounded-xl shadow-lg">
                 <div className="flex items-center gap-2 text-primary mb-1">
                   <Heart className="w-5 h-5" strokeWidth={1.75} />
                   <span className="text-[11px] font-bold uppercase tracking-wider text-primary">
@@ -232,7 +188,7 @@ export default function AboutPage() {
                 </p>
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-4 mt-4">
+            <div className="grid grid-cols-2 gap-4 mt-8 sm:mt-6">
               <div className="bg-surface-container p-4 rounded-lg flex flex-col items-start">
                 <span className="text-[22px] font-extrabold text-primary">36</span>
                 <span className="text-sm text-on-surface-variant font-medium">
@@ -260,31 +216,27 @@ export default function AboutPage() {
             </RevealText>
             <RevealText delay={100}>
               <h2 className="font-display text-3xl sm:text-4xl text-on-surface leading-tight">
-                Rooted in Aba Craft, Designed for Modern Little Stars
+                Designed for Modern Little Stars, Styled with Confidence
               </h2>
             </RevealText>
             <RevealText delay={200}>
               <div className="space-y-4 text-sm sm:text-base text-on-surface-variant leading-relaxed">
                 <p>
                   <strong className="text-on-surface font-semibold">Styled by Uriel</strong>{" "}
-                  started with a simple observation: children deserve clothes that feel as
-                  wonderfully comfortable as sleepwear while looking as elevated and trendy as
-                  high-end streetwear.
+                  is dedicated to creating stylish, comfortable, and quality outfits for kids.
+                  We believe children deserve clothing that combines modern fashion with the
+                  softness and ease they need to play, learn, and grow freely.
                 </p>
                 <p>
-                  From our creative hub at{" "}
-                  <strong className="text-on-surface font-semibold">
-                    Enyimba Market, Aba, Abia State
-                  </strong>{" "}
-                  — renowned across West Africa for garment craft and vibrant commercial energy —
-                  we personally source premium breathable fabrics, oversee every stitch and seam,
-                  and design timeless pieces that withstand rough playground adventures and wash
-                  after wash.
+                  From everyday wear to special occasions, we offer carefully selected and beautifully
+                  designed children&apos;s clothing built for both comfort and durability. Every piece is
+                  created with care to ensure it feels gentle against young skin while enduring active play
+                  and wash after wash.
                 </p>
                 <p>
-                  Every tracksuit, graphic polo, and tailored cargo jean is infused with care. We
-                  make dressing up effortless for Nigerian parents who want their young boys and
-                  girls to exude charm, gentleness, and effortless swagger.
+                  Our goal is to make children&apos;s fashion more exciting, elegant, and accessible while
+                  delivering excellent customer service. We help parents dress their little ones with
+                  confidence, joy, and effortless style.
                 </p>
               </div>
             </RevealText>
@@ -334,8 +286,8 @@ export default function AboutPage() {
             </RevealText>
             <RevealText delay={200}>
               <p className="text-sm sm:text-base text-on-surface-variant leading-relaxed">
-                Built on genuine tenderness for your children, authentic Nigerian craftsmanship,
-                and world-class garment design.
+                Built on a dedication to stylish design, gentle comfort, and lasting quality for your
+                little ones.
               </p>
             </RevealText>
           </div>
@@ -382,8 +334,8 @@ export default function AboutPage() {
             </div>
             <RevealText delay={200}>
               <p className="text-sm sm:text-base text-on-surface-variant max-w-md leading-relaxed">
-                How raw textiles in Aba transform into comfortable, statement looks for your
-                little ones.
+                How thoughtful design and quality fabrics come together into comfortable, stylish looks
+                for your little ones.
               </p>
             </RevealText>
           </div>
@@ -447,7 +399,7 @@ export default function AboutPage() {
                 <div className="flex items-start gap-3 p-3 bg-surface-container rounded-lg">
                   <MapPin className="w-5 h-5 text-primary mt-0.5" strokeWidth={1.75} />
                   <div>
-                    <strong className="text-sm text-on-surface block">Atelier Location</strong>
+                    <strong className="text-sm text-on-surface block">Store &amp; Pickup Location</strong>
                     <span className="text-sm text-on-surface-variant">
                       Enyimba Market, Aba, Abia State, Nigeria
                     </span>
@@ -475,10 +427,10 @@ export default function AboutPage() {
                   <div>
                     <strong className="text-sm text-on-surface block">Official Inquiries</strong>
                     <a
-                      href="mailto:natashaejike99@gmail.com"
+                      href="mailto:styledbyuriel1@gmail.com"
                       className="text-sm text-primary font-semibold hover:underline"
                     >
-                      natashaejike99@gmail.com
+                      styledbyuriel1@gmail.com
                     </a>
                   </div>
                 </div>
@@ -512,23 +464,22 @@ export default function AboutPage() {
               </a>
             </div>
             <div className="p-6 bg-surface flex flex-col justify-between flex-1 gap-4">
-              <div className="flex items-center justify-between gap-3">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 sm:gap-3 items-start">
                 <div>
                   <span className="text-[10px] font-bold uppercase tracking-widest text-primary">
-                    Commercial Center
+                    Nationwide Fulfillment
                   </span>
-                  <h3 className="text-lg font-bold text-on-surface">Aba Garment Ecosystem</h3>
+                  <h3 className="text-lg font-bold text-on-surface">Reliable Delivery &amp; Customer Care</h3>
                 </div>
                 <span className="bg-secondary-container text-secondary px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider whitespace-nowrap">
                   Fast Interstate Dispatch
                 </span>
               </div>
               <p className="text-sm sm:text-base text-on-surface-variant leading-relaxed">
-                Strategically centered in Aba to tap into authentic textile artisans, top-tier
-                seamstresses, and seamless logistics routes connecting our studio directly to
-                Lagos, Abuja, Port Harcourt, Enugu, and all Nigerian state capitals.
+                We&apos;re committed to making every order a smooth experience, from careful preparation
+                and quality checks to reliable delivery and customer care.
               </p>
-              <div className="flex items-center justify-between pt-1 text-sm text-on-surface border-t border-surface-container pt-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-t border-surface-container pt-4 text-xs sm:text-sm text-on-surface">
                 <span className="flex items-center gap-2 text-xs sm:text-sm">
                   <span className="w-2 h-2 rounded-full bg-[#25D366]" />
                   Open Mon – Sat: 8:00 AM – 6:00 PM WAT
@@ -558,8 +509,8 @@ export default function AboutPage() {
             </RevealText>
             <RevealText delay={200}>
               <p className="text-sm sm:text-base text-on-surface-variant leading-relaxed">
-                Discover our latest tracksuits, varsity-inspired polos, and durable denim
-                trousers crafted right here in Aba.
+                Discover our latest tracksuits, stylish polos, and durable outfits designed
+                to make children&apos;s fashion exciting, elegant, and comfortable.
               </p>
             </RevealText>
           </div>

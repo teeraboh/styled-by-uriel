@@ -289,7 +289,7 @@ export default async function HomePage() {
                     tagline={tagline}
                     description={
                       product.description ||
-                      `${product.name} • Handcrafted in Aba`
+                      `${product.name} • Stylish & Comfortable`
                     }
                     badge={badge}
                     featured={index === 0}

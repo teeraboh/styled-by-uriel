@@ -320,14 +320,14 @@ export function ShopClient({ initialProducts, categories }: ShopClientProps) {
         <div className="max-w-7xl mx-auto flex flex-col gap-4">
           {/* Category pills + search */}
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-            <div className="flex flex-wrap items-center gap-2">
+            <div className="flex items-center gap-2 overflow-x-auto pb-1 lg:pb-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden flex-nowrap lg:flex-wrap">
               {categoryTabs.map((cat) => (
                 <button
                   key={cat.id}
                   type="button"
                   onClick={() => setActiveCategory(cat.id)}
                   className={cn(
-                    "min-h-[40px] px-4 py-2 rounded-full text-[13px] font-semibold transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
+                    "shrink-0 min-h-[40px] px-4 py-2 rounded-full text-[13px] font-semibold transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
                     activeCategory === cat.id
                       ? "bg-primary-container text-on-primary-container shadow-sm font-bold"
                       : "bg-surface-container hover:bg-surface-container-high text-on-surface"

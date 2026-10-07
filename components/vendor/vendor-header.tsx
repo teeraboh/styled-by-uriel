@@ -36,7 +36,7 @@ export function VendorHeader({ onMenuToggle }: VendorHeaderProps) {
   }, [profileOpen]);
 
   return (
-    <header className="fixed top-0 left-0 lg:left-72 right-0 z-40 flex items-center justify-between w-full py-4 px-4 lg:px-8 bg-white border-b border-gray-100">
+    <header className="fixed top-0 left-0 lg:left-72 right-0 z-40 flex items-center justify-between py-4 px-4 lg:px-8 bg-white border-b border-gray-100">
       {/* Left group: mobile menu + status badges (sm+) */}
       <div className="flex items-center gap-3 min-w-0">
         {/* Mobile menu button - 44px touch target */}
@@ -117,7 +117,6 @@ export function VendorHeader({ onMenuToggle }: VendorHeaderProps) {
               <form action={logoutAction} className="w-full">
                 <button
                   type="submit"
-                  onClick={() => setProfileOpen(false)}
                   title="Sign out of Vendor Portal"
                   className="w-full flex items-center gap-2 px-4 py-2.5 mt-1 rounded-md text-[13px] font-semibold text-[#82746d] hover:text-[#ba1a1a] hover:bg-[#ffdad6]/50 transition-colors cursor-pointer text-left"
                 >

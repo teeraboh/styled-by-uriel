@@ -9,8 +9,6 @@ import {
   Shirt,
   ShoppingBag,
   Sliders,
-  MessageSquare,
-  BadgeCheck,
   LogOut,
   X,
 } from "lucide-react";
@@ -80,7 +78,7 @@ export function VendorSidebar({ isOpen, onClose }: VendorSidebarProps) {
       {/* Sidebar Aside */}
       <aside
         className={cn(
-          "fixed left-0 top-0 h-screen w-72 bg-[#fff1eb] z-[100] flex flex-col justify-between shadow-[0_1px_8px_rgba(0,0,0,0.04)] transition-transform duration-300 ease-in-out border-r border-[#f0dfd8]/60",
+          "fixed left-0 top-0 h-screen w-72 bg-[#fff1eb] z-[100] flex flex-col justify-between overflow-y-auto shadow-[0_1px_8px_rgba(0,0,0,0.04)] transition-transform duration-300 ease-in-out border-r border-[#f0dfd8]/60",
           isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
         )}
       >
@@ -153,38 +151,8 @@ export function VendorSidebar({ isOpen, onClose }: VendorSidebarProps) {
           </nav>
         </div>
 
-        {/* Bottom Workshop Node & Logout */}
-        <div className="p-3 m-3 flex flex-col gap-2">
-          {/* Workshop Node Card */}
-          <div className="p-3.5 rounded-xl bg-[#f6e5de] border border-[#f0dfd8]/70">
-            <div className="flex items-center justify-between">
-              <span className="text-[11px] font-bold text-[#71523c] uppercase tracking-wider">
-                Workshop Node
-              </span>
-              <span className="inline-flex items-center gap-1.5 text-[12px] text-[#221a16] font-semibold">
-                <span className="w-2 h-2 rounded-full bg-[#34A853] animate-pulse" />
-                Live
-              </span>
-            </div>
-            <p className="text-[13px] font-bold text-[#221a16] mt-1.5">
-              Aba Artisan Hub
-            </p>
-            <p className="text-[12px] text-[#50453e] mt-0.5 leading-snug">
-              Accepting custom orders &amp; bespoke tailoring
-            </p>
-            <div className="mt-2.5 flex items-center justify-between pt-2 border-t border-[#f0dfd8]">
-              <a
-                href="https://wa.me/2347039315917"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 text-[12px] text-[#71523c] font-bold hover:text-[#221a16] transition-colors"
-              >
-                <MessageSquare className="w-3.5 h-3.5" />
-                WhatsApp Hotline
-              </a>
-              <BadgeCheck className="w-4 h-4 text-[#82746d]" />
-            </div>
-          </div>
+        {/* Bottom Logout */}
+        <div className="p-3 m-3">
 
           {/* Logout Button (Server Action) */}
           <form action={logoutAction} className="w-full">

@@ -166,15 +166,15 @@ export function ProductDetailClient({ product, relatedProducts = [] }: ProductDe
     <main className="bg-surface">
       {/* ── Breadcrumb ── */}
       <div className="w-full bg-surface-container-low/60 py-2 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto flex items-center gap-1 text-xs text-on-surface-variant flex-wrap min-w-0">
+        <div className="max-w-7xl mx-auto flex items-center gap-1.5 sm:gap-2 text-xs sm:text-[13px] text-on-surface-variant overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden flex-nowrap">
           <Link href="/" className="hover:text-primary transition-colors shrink-0">
             Home
           </Link>
           <ChevronRight className="w-3.5 h-3.5 shrink-0" />
-          <Link href="/shop" className="hover:text-primary transition-colors shrink-0">
+          <Link href="/shop" className="hidden sm:inline-flex hover:text-primary transition-colors shrink-0">
             Boys Streetwear
           </Link>
-          <ChevronRight className="w-3.5 h-3.5 shrink-0" />
+          <ChevronRight className="hidden sm:inline-block w-3.5 h-3.5 shrink-0" />
           <Link
             href={`/shop`}
             className="hover:text-primary transition-colors shrink-0"
@@ -182,7 +182,7 @@ export function ProductDetailClient({ product, relatedProducts = [] }: ProductDe
             {categoryLabel}
           </Link>
           <ChevronRight className="w-3.5 h-3.5 shrink-0" />
-          <span className="text-on-surface font-semibold truncate max-w-[140px] xs:max-w-[200px] sm:max-w-none">
+          <span className="text-on-surface font-semibold shrink-0 sm:max-w-none">
             {product.name}
           </span>
         </div>
@@ -320,14 +320,14 @@ export function ProductDetailClient({ product, relatedProducts = [] }: ProductDe
                   Size Guide
                 </button>
               </div>
-              <div className="grid grid-cols-3 xs:grid-cols-5 sm:grid-cols-5 gap-1.5 sm:gap-2">
+              <div className="grid grid-cols-5 gap-1.5 sm:gap-2">
                 {SIZES.map((size) => (
                   <button
                     key={size}
                     type="button"
                     onClick={() => setSelectedSize(size)}
                     className={cn(
-                      "py-2 px-1 text-center rounded-lg text-xs sm:text-[13px] font-semibold uppercase min-h-[38px] sm:min-h-[40px] transition-all cursor-pointer",
+                      "py-2 px-0.5 sm:px-1 text-center rounded-lg text-[11px] sm:text-[13px] font-semibold uppercase min-h-[38px] sm:min-h-[40px] transition-all cursor-pointer",
                       selectedSize === size
                         ? "bg-primary-container text-on-primary-container font-bold shadow-sm"
                         : "bg-surface-container-high text-on-surface hover:bg-primary/10"
@@ -445,7 +445,7 @@ export function ProductDetailClient({ product, relatedProducts = [] }: ProductDe
       {/* ── Specs & details tabs ── */}
       <section className="w-full px-4 sm:px-6 lg:px-8 py-10 bg-surface-container-lowest">
         <div className="max-w-7xl mx-auto flex flex-col gap-6">
-          <div className="w-full overflow-x-auto pb-2 pt-1 -mx-4 px-4 sm:mx-0 sm:px-0 scrollbar-none">
+          <div className="w-full overflow-x-auto pb-2 pt-1 -mx-4 px-4 sm:mx-0 sm:px-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             <div className="inline-flex items-center gap-2 bg-surface-container-low/40 p-1.5 rounded-xl min-w-max pr-3 sm:pr-1.5">
               {TABS.map((tab) => (
                 <button

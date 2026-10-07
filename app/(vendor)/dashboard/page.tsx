@@ -154,6 +154,87 @@ export default function VendorDashboardPage() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isPickerOpen]);
 
+  // ── Live Dashboard KPIs State ──
+  const [liveOrders, setLiveOrders] = useState<Array<{
+    total_amount?: number;
+    payment_status?: string;
+    delivery_status?: string | null;
+  }>>([]);
+  const [liveProducts, setLiveProducts] = useState<Array<{
+    availability?: boolean;
+    stock_quantity?: number | null;
+  }>>([]);
+  const [isLoadingKPIs, setIsLoadingKPIs] = useState<boolean>(true);
+
+  // Parallel fetch on mount from existing verified endpoints
+  useEffect(() => {
+    let isMounted = true;
+    async function loadDashboardKPIs() {
+      try {
+        setIsLoadingKPIs(true);
+        const [ordersRes, productsRes] = await Promise.all([
+          fetch("/api/orders"),
+          fetch("/api/products?limit=100&includeUnavailable=true"),
+        ]);
+
+        if (isMounted) {
+          if (ordersRes.ok) {
+            const ordersData = await ordersRes.json();
+            if (Array.isArray(ordersData.orders)) {
+              setLiveOrders(ordersData.orders);
+            }
+          } else {
+            console.error("[VendorDashboard] Failed to fetch orders for KPIs:", ordersRes.status);
+          }
+
+          if (productsRes.ok) {
+            const productsData = await productsRes.json();
+            if (Array.isArray(productsData.products)) {
+              setLiveProducts(productsData.products);
+            }
+          } else {
+            console.error("[VendorDashboard] Failed to fetch products for KPIs:", productsRes.status);
+          }
+        }
+      } catch (err) {
+        console.error("[VendorDashboard] Error loading dashboard KPIs:", err);
+      } finally {
+        if (isMounted) {
+          setIsLoadingKPIs(false);
+        }
+      }
+    }
+
+    loadDashboardKPIs();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  // ── Live KPI Calculations ──
+  const totalRevenue = liveOrders
+    .filter((order) => order.payment_status === "paid")
+    .reduce((sum, order) => sum + Number(order.total_amount || 0), 0);
+
+  const completedOrdersCount = liveOrders.filter(
+    (order) =>
+      order.payment_status === "paid" &&
+      order.delivery_status === "delivered"
+  ).length;
+
+  const activeProductsCount = liveProducts.filter(
+    (product) =>
+      product.availability === true &&
+      (product.stock_quantity ?? 0) > 0
+  ).length;
+
+  const pendingDispatchCount = liveOrders.filter(
+    (order) =>
+      order.payment_status === "paid" &&
+      (order.delivery_status === "confirmed" || !order.delivery_status)
+  ).length;
+
   const products = useVendorCatalogStore((state) => state.products);
   const productsCount = products.length;
   const tracksuitsCount = products.filter((p) => p.category === "tracksuits").length;
@@ -195,8 +276,8 @@ export default function VendorDashboardPage() {
         o.status,
       ]),
       [""],
-      ["Gross Sales (NGN)", "3,840,000"],
-      ["Completed Orders", "142"],
+      ["Gross Sales (NGN)", totalRevenue.toLocaleString("en-NG")],
+      ["Completed Orders", String(completedOrdersCount)],
     ];
     const csv = csvRows
       .map((row) =>
@@ -408,7 +489,7 @@ export default function VendorDashboardPage() {
               Total Revenue
             </p>
             <p className="font-serif text-2xl sm:text-3xl text-[#221a16] font-bold mt-2">
-              ₦3,840,000
+              {isLoadingKPIs ? "—" : `₦${totalRevenue.toLocaleString("en-NG")}`}
             </p>
           </div>
           <div className="mt-4 flex items-center gap-1.5 text-[13px] text-[#2e7d32] font-semibold pt-3 border-t border-[#f0dfd8]/50">
@@ -424,7 +505,7 @@ export default function VendorDashboardPage() {
               Completed Orders
             </p>
             <p className="font-serif text-2xl sm:text-3xl text-[#221a16] font-bold mt-2">
-              142
+              {isLoadingKPIs ? "—" : completedOrdersCount}
             </p>
           </div>
           <div className="mt-4 flex items-center gap-1.5 text-[13px] text-[#5e584f] font-medium pt-3 border-t border-[#f0dfd8]/50">
@@ -440,7 +521,7 @@ export default function VendorDashboardPage() {
               Active Products
             </p>
             <p className="font-serif text-2xl sm:text-3xl text-[#221a16] font-bold mt-2">
-              {productsCount} Items
+              {isLoadingKPIs ? "—" : `${activeProductsCount} Items`}
             </p>
           </div>
           <div className="mt-4 flex items-center gap-1.5 text-[13px] text-[#5e584f] font-medium pt-3 border-t border-[#f0dfd8]/50">
@@ -456,7 +537,7 @@ export default function VendorDashboardPage() {
               Pending Dispatch
             </p>
             <p className="font-serif text-2xl sm:text-3xl text-[#71523c] font-bold mt-2">
-              4 Orders
+              {isLoadingKPIs ? "—" : `${pendingDispatchCount} Orders`}
             </p>
           </div>
           <div className="mt-4 flex items-center gap-1.5 text-[13px] text-[#795e3d] font-medium pt-3 border-t border-[#f0dfd8]/50">

@@ -11,7 +11,7 @@ function LoginForm() {
   const searchParams = useSearchParams();
   const fromUrl = searchParams.get("from") || "/dashboard";
 
-  const [email, setEmail] = useState("natasha@styledbyuriel.com");
+  const [email, setEmail] = useState("Styledbyuriel1@gmail.com");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [honeypot, setHoneypot] = useState("");

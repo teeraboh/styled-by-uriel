@@ -35,7 +35,7 @@ export default function ContactPage() {
             <div className="flex items-center gap-2 mb-3">
               <span className="w-8 h-px bg-primary" />
               <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-primary">
-                Crafted in Aba • Shipped Nationwide
+                Premium Children&apos;s Fashion • Shipped Nationwide
               </span>
               <span className="w-8 h-px bg-primary" />
             </div>
@@ -83,7 +83,7 @@ export default function ContactPage() {
                 <div className="flex flex-col gap-3">
                   {/* Email */}
                   <a
-                    href="mailto:natashaejike99@gmail.com"
+                    href="mailto:styledbyuriel1@gmail.com"
                     className="flex items-center gap-3 p-3 rounded-xl bg-brand-cream hover:bg-brand-sand/60 border border-brand-beige/60 transition-colors group"
                   >
                     <div className="w-9 h-9 rounded-full bg-brand-warm-brown/10 flex items-center justify-center text-brand-warm-brown group-hover:bg-brand-warm-brown group-hover:text-white transition-colors shrink-0">
@@ -94,7 +94,7 @@ export default function ContactPage() {
                         Email Desk (Response within 12–24 hrs)
                       </span>
                       <span className="text-xs sm:text-sm font-bold text-brand-dark-brown truncate">
-                        natashaejike99@gmail.com
+                        styledbyuriel1@gmail.com
                       </span>
                     </div>
                   </a>
@@ -167,7 +167,7 @@ export default function ContactPage() {
                 </div>
 
                 <p className="text-xs sm:text-sm text-on-surface-variant mb-4 font-medium leading-relaxed">
-                  Every order packed at our Aba hub is inspected and expedited with tracked
+                  Every order is carefully inspected, packed, and expedited with tracked
                   nationwide delivery partners across Nigeria.
                 </p>
 
@@ -179,7 +179,7 @@ export default function ContactPage() {
                         South East (Enugu, Owerri, Port Harcourt)
                       </strong>
                       <span className="text-xs text-on-surface-variant">
-                        Next day transit dispatch directly from our Aba terminal.
+                        Next day transit dispatch across South East destinations.
                       </span>
                     </div>
                   </li>
@@ -247,7 +247,7 @@ export default function ContactPage() {
             <Heart className="w-5 h-5 text-brand-warm-brown fill-brand-warm-brown" />
           </div>
           <p className="text-[10px] sm:text-xs font-bold text-on-surface-variant tracking-[0.25em] uppercase mt-1">
-            Styled by Uriel • Aba to the World
+            Styled by Uriel • Little Styles, Big Confidence
           </p>
         </section>
       </div>

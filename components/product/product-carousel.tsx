@@ -274,7 +274,7 @@ export function ProductCarousel({
   });
 
   const arrowClass = cn(
-    "absolute top-1/2 -translate-y-1/2 z-40 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-white/95 backdrop-blur-md border border-brand-beige/80 shadow-lg text-brand-dark-brown hover:text-brand-warm-brown flex items-center justify-center transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-warm-brown cursor-pointer hover:bg-white hover:scale-105 active:scale-95 hover:shadow-xl"
+    "hidden sm:flex absolute top-1/2 -translate-y-1/2 z-40 w-11 h-11 rounded-full bg-white/95 backdrop-blur-md border border-brand-beige/80 shadow-lg text-brand-dark-brown hover:text-brand-warm-brown items-center justify-center transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-warm-brown cursor-pointer hover:bg-white hover:scale-105 active:scale-95 hover:shadow-xl"
   );
 
   return (

@@ -23,7 +23,9 @@ import {
 export * from "./types";
 export { escapeHtml, formatNgnAmount };
 
-const SENDER_EMAIL = "Styled by Uriel <onboarding@resend.dev>";
+const SENDER_EMAIL =
+  process.env.RESEND_FROM_EMAIL?.trim() ||
+  "Styled by Uriel <orders@styledbyuriel.com.ng>";
 
 /**
  * Lazily instantiate the Resend client.

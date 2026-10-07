@@ -30,7 +30,7 @@ export function TrustStrip() {
       data-purpose="trust-propositions"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 lg:gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
           {TRUST_ITEMS.map((item) => (
             <div key={item.title} className="flex items-center gap-3.5">
               <div className="w-11 h-11 rounded-lg bg-surface-container border border-brand-beige/40 flex items-center justify-center text-primary shrink-0">

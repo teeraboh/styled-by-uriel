@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { RevealText } from "@/components/ui/reveal-text";
 
 export interface PromoBannerProps {
   /** Optional custom model image URL */
@@ -45,34 +46,40 @@ export function PromoBanner({
 
           {/* Left Content Column */}
           <div className="relative z-20 flex flex-col md:flex-row md:items-center gap-4 sm:gap-6 lg:gap-8 w-full sm:max-w-[70%] lg:max-w-2xl">
-            <div className="shrink-0 transform -rotate-2">
-              <p className="font-script text-2xl sm:text-4xl lg:text-5xl text-brand-warm-brown font-bold leading-tight tracking-normal drop-shadow-xs">
-                Cute
-                <br />
-                Comfy
-                <br />
-                Stylish ♡
-              </p>
-            </div>
+            <RevealText delay={0} className="shrink-0">
+              <div className="transform -rotate-2">
+                <p className="font-script text-2xl sm:text-4xl lg:text-5xl text-brand-warm-brown font-bold leading-tight tracking-normal drop-shadow-xs">
+                  Cute
+                  <br />
+                  Comfy
+                  <br />
+                  Stylish ♡
+                </p>
+              </div>
+            </RevealText>
 
             <div className="hidden md:block w-px h-24 bg-brand-beige" />
 
             <div className="flex flex-col justify-center pr-4">
-              <h3 className="font-display font-bold text-2xl sm:text-3xl lg:text-4xl text-on-surface leading-tight tracking-tight uppercase drop-shadow-xs">
-                DRESS
-                <br />
-                THE NEXT
-                <br />
-                GENERATION
-              </h3>
+              <RevealText delay={100}>
+                <h3 className="font-display font-bold text-2xl sm:text-3xl lg:text-4xl text-on-surface leading-tight tracking-tight uppercase drop-shadow-xs">
+                  DRESS
+                  <br />
+                  THE NEXT
+                  <br />
+                  GENERATION
+                </h3>
+              </RevealText>
 
-              <div className="flex items-center gap-2 mt-2 sm:mt-3">
-                <span className="w-3 sm:w-5 h-px bg-primary/60" />
-                <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.2em] text-primary">
-                  EXPLORE NEW ARRIVALS
-                </span>
-                <span className="w-3 sm:w-5 h-px bg-primary/60" />
-              </div>
+              <RevealText delay={200}>
+                <div className="flex items-center gap-2 mt-2 sm:mt-3">
+                  <span className="w-3 sm:w-5 h-px bg-primary/60" />
+                  <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.2em] text-primary">
+                    EXPLORE NEW ARRIVALS
+                  </span>
+                  <span className="w-3 sm:w-5 h-px bg-primary/60" />
+                </div>
+              </RevealText>
             </div>
           </div>
 
@@ -90,13 +97,15 @@ export function PromoBanner({
 
           {/* Right Action CTA Button - centered below image on mobile */}
           <div className="relative z-20 shrink-0 w-full sm:w-auto flex items-center justify-center sm:justify-end sm:flex-col sm:items-end mt-6 sm:mt-0">
-            <Link
-              href={href}
-              className="inline-flex items-center gap-2 px-5 sm:px-6 py-3 sm:py-3.5 rounded-lg text-xs sm:text-[13px] font-bold uppercase tracking-wider bg-primary hover:bg-brand-warm-brown-dark text-on-primary shadow-md hover:shadow-xl transition-all duration-200 transform hover-lift"
-            >
-              <span>SHOP NOW</span>
-              <ArrowRight className="w-4 h-4" />
-            </Link>
+            <RevealText delay={300}>
+              <Link
+                href={href}
+                className="inline-flex items-center gap-2 px-5 sm:px-6 py-3 sm:py-3.5 rounded-lg text-xs sm:text-[13px] font-bold uppercase tracking-wider bg-primary hover:bg-brand-warm-brown-dark text-on-primary shadow-md hover:shadow-xl transition-all duration-200 transform hover-lift"
+              >
+                <span>SHOP NOW</span>
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            </RevealText>
           </div>
         </div>
       </div>
